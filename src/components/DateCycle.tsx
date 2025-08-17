@@ -65,10 +65,10 @@ export default function DateCycle() {
   const monthYear = getMonthYear();
 
   // Navigation button base classes
-  const navButtonClasses = `py-1 px-4 rounded-full transition-all duration-200 bg-white border border-2 font-semibold border-[#ff6961] ${
+  const navButtonClasses = `py-1 px-4 rounded-full transition-all duration-200 bg-white border border-2 font-semibold border-[#FF8D7B] ${
     isTransitioning 
       ? 'opacity-50 cursor-not-allowed' 
-      : 'hover:bg-gray-100 text-[#ff6961] hover:scale-105'
+      : 'hover:bg-gray-100 text-[#FF8D7B] hover:scale-105'
   }`;
 
   // Navigation handlers
@@ -137,7 +137,7 @@ export default function DateCycle() {
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-2 w-full">
       <div className="flex flex-row gap-4 justify-between w-full items-center text-lg">
         <button
           type="button"
@@ -166,7 +166,7 @@ export default function DateCycle() {
       <div className="w-full flex justify-center overflow-hidden pb-4">
         <div 
           ref={scrollContainerRef}
-          className={`flex gap-3 min-w-max transition-transform duration-300 ${
+          className={`flex justify-between w-full min-w-max transition-transform duration-300 ${
             isTransitioning ? 'pointer-events-none' : ''
           }`}
         >
@@ -203,7 +203,7 @@ export default function DateCycle() {
                 <div
                   className={`relative flex items-center justify-center w-11 h-11 rounded-2xl border-3 transition-all duration-300 ease-in-out ${
                     isSelected
-                      ? "border-[#FF6961] scale-105 shadow-lg"
+                      ? "border-[#FF8D7B] scale-105 shadow-lg"
                       : predictionType === "ovulation"
                       ? "border-dotted border-[#ffd700] hover:scale-102"
                       : predictionType === "period"
