@@ -1,6 +1,6 @@
 import { Bell } from 'lucide-react';
-import React from 'react';
 import RateFeeling from '../components/RateFeeling';
+import DateCycle from '../components/DateCycle';
 
 export default function Home() {
   return (
@@ -12,6 +12,7 @@ export default function Home() {
         </button>
       </div>
       <RateFeeling />
+      <DateCycle /> 
     </div>
   );
 }
