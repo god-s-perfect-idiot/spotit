@@ -1,10 +1,16 @@
-import React from 'react';
+import { BlogCategories, CustomisedBlogs, FeaturedBlogs } from '../components/Blogs';
+import Notifications from '../components/Notifications';
 
 export default function Read() {
   return (
-    <div className="flex-1 p-6">
-      <h1 className="text-2xl font-bold mb-4">Read</h1>
-      <p className="text-gray-600">Read and explore content in your library.</p>
+    <div className="flex-1 p-6 flex flex-col gap-4">
+      <div className="flex flex-row justify-between gap-4">
+        <h1 className="text-2xl font-bold">Read</h1>
+        <Notifications />
+      </div>
+      <FeaturedBlogs />
+      <CustomisedBlogs />
+      <BlogCategories />
     </div>
   );
 }

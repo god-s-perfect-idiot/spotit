@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getPhase, getPhaseColor } from "../utils/insight-helper";
+import { getPhase, getPhaseColor } from "../../utils/insight-helper";
 
 export default function DayBrief() {
   const [briefTitle, setBriefTitle] = useState<string>("");

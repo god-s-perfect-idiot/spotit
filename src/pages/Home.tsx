@@ -1,17 +1,16 @@
-import { Bell } from 'lucide-react';
-import RateFeeling from '../components/RateFeeling';
-import DateCycle from '../components/DateCycle';
-import DayBrief from '../components/DayBrief';
-import CycleGuides from '../components/CycleGuides';
+import RateFeeling from '../components/home/RateFeeling';
+import DateCycle from '../components/home/DateCycle';
+import DayBrief from '../components/home/DayBrief';
+import CycleGuides from '../components/home/CycleGuides';
+import Blogs from '../components/Blogs';
+import Notifications from '../components/Notifications';
 
 export default function Home() {
   return (
     <div className="flex-1 p-6 flex flex-col gap-4">
       <div className="flex flex-row gap-4 justify-between items-center">
         <span className="text-2xl font-bold">Hello, Samara</span>
-        <button className="bg-[#FF8D7B] text-white p-2 rounded-full">
-          <Bell size={18} />
-        </button>
+        <Notifications />
       </div>
       <RateFeeling />
       <DateCycle />
@@ -25,6 +24,9 @@ export default function Home() {
         </button>
       </div>
       <CycleGuides />
+      <Blogs blogType="pre-period" />
+      <Blogs blogType="pms-care" />
+      <Blogs blogType="hormone-balance" />
     </div>
   );
 }
