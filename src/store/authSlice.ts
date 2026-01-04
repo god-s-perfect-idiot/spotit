@@ -75,10 +75,10 @@ export const loginWithGoogle = createAsyncThunk(
       const token = await firebaseUser.getIdToken();
       return { user, token };
     } catch (error) {
-      // Don't reject if popup was closed
+      // Don't reject if popup was closed or redirect was initiated
       const message = error instanceof Error ? error.message : 'Google sign-in failed';
-      if (message === 'POPUP_CLOSED') {
-        return rejectWithValue('POPUP_CLOSED');
+      if (message === 'POPUP_CLOSED' || message === 'REDIRECT_INITIATED') {
+        return rejectWithValue(message);
       }
       return rejectWithValue(message);
     }
@@ -94,10 +94,10 @@ export const loginWithApple = createAsyncThunk(
       const token = await firebaseUser.getIdToken();
       return { user, token };
     } catch (error) {
-      // Don't reject if popup was closed
+      // Don't reject if popup was closed or redirect was initiated
       const message = error instanceof Error ? error.message : 'Apple sign-in failed';
-      if (message === 'POPUP_CLOSED') {
-        return rejectWithValue('POPUP_CLOSED');
+      if (message === 'POPUP_CLOSED' || message === 'REDIRECT_INITIATED') {
+        return rejectWithValue(message);
       }
       return rejectWithValue(message);
     }
@@ -238,8 +238,8 @@ const authSlice = createSlice({
       })
       .addCase(loginWithGoogle.rejected, (state, action) => {
         state.isLoading = false;
-        // Only set error if it's not a popup closed message
-        if (action.payload !== 'POPUP_CLOSED') {
+        // Only set error if it's not a popup closed or redirect initiated message
+        if (action.payload !== 'POPUP_CLOSED' && action.payload !== 'REDIRECT_INITIATED') {
           state.error = action.payload as string;
         }
       });
@@ -259,8 +259,8 @@ const authSlice = createSlice({
       })
       .addCase(loginWithApple.rejected, (state, action) => {
         state.isLoading = false;
-        // Only set error if it's not a popup closed message
-        if (action.payload !== 'POPUP_CLOSED') {
+        // Only set error if it's not a popup closed or redirect initiated message
+        if (action.payload !== 'POPUP_CLOSED' && action.payload !== 'REDIRECT_INITIATED') {
           state.error = action.payload as string;
         }
       });

@@ -5,7 +5,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { store, persistor } from './store/store'
 import { useAppSelector, useAppDispatch } from './store/hooks'
 import { checkAuthState } from './store/authSlice'
-import { onAuthStateChange } from './utils/firebaseAuth'
+import { onAuthStateChange, getAuthRedirectResult } from './utils/firebaseAuth'
 import Layout from './Layout'
 import Landing from './pages/Landing'
 import MultiStageLogin from './components/auth/MultiStageLogin'
@@ -20,6 +20,21 @@ function AuthStateObserver() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    // Check for redirect result first (for mobile OAuth flows)
+    const checkRedirectResult = async () => {
+      try {
+        const redirectResult = await getAuthRedirectResult();
+        if (redirectResult) {
+          // User signed in via redirect, check auth state to update Redux
+          await dispatch(checkAuthState(redirectResult.firebaseUser));
+        }
+      } catch (error) {
+        console.error('Error checking redirect result:', error);
+      }
+    };
+
+    checkRedirectResult();
+
     // Set up Firebase auth state observer
     const unsubscribe = onAuthStateChange(async (firebaseUser) => {
       await dispatch(checkAuthState(firebaseUser));
@@ -96,13 +111,12 @@ function AppContent() {
         {/* Onboarding route - separate from Layout */}
         <Route path="/onboarding" element={<OnboardingRoute />} />
         
-        {/* Protected routes */}
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Navigate to="/home" replace />} />
-          <Route path="home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="insights" element={<ProtectedRoute><Insights /></ProtectedRoute>} />
-          <Route path="read" element={<ProtectedRoute><Read /></ProtectedRoute>} />
-          <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        {/* Protected routes with Layout */}
+        <Route element={<Layout />}>
+          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/insights" element={<ProtectedRoute><Insights /></ProtectedRoute>} />
+          <Route path="/read" element={<ProtectedRoute><Read /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         </Route>
       </Routes>
     </Router>

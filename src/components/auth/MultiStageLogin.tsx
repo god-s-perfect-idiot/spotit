@@ -40,11 +40,12 @@ export default function MultiStageLogin() {
   const renderModal = () => {
     switch (currentStage) {
       case 'welcome':
-        return <WelcomeModal onGetStarted={handleGetStarted} />;
+        return <WelcomeModal key="welcome" onGetStarted={handleGetStarted} />;
       
       case 'choice':
         return (
           <LoginSignupChoiceModal
+            key="choice"
             onLogin={handleLogin}
             onSignup={handleSignup}
             onSkip={handleSkip}
@@ -54,6 +55,7 @@ export default function MultiStageLogin() {
       case 'login':
         return (
           <LoginModal
+            key="login"
             onSignup={handleBackToChoice}
             onSuccess={handleAuthSuccess}
           />
@@ -62,19 +64,22 @@ export default function MultiStageLogin() {
       case 'signup':
         return (
           <SignupModal
+            key="signup"
             onLogin={handleBackToChoice}
             onSuccess={handleAuthSuccess}
           />
         );
       
       default:
-        return <WelcomeModal onGetStarted={handleGetStarted} />;
+        return <WelcomeModal key="welcome-default" onGetStarted={handleGetStarted} />;
     }
   };
 
   return (
     <AuthBackground>
-      {renderModal()}
+      <div className="animate-fade-in">
+        {renderModal()}
+      </div>
     </AuthBackground>
   );
 }

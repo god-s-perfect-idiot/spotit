@@ -97,7 +97,7 @@ export default function SignupModal({ onLogin, onSuccess }: SignupModalProps) {
       </p>
       
       <form onSubmit={handleSubmit} className="space-y-4 flex w-full flex-col items-center">
-        <div className="w-full max-w-[18rem] flex items-center">
+        <div className="w-full  flex items-center">
           <input
             type="email"
             name="email"
@@ -109,7 +109,7 @@ export default function SignupModal({ onLogin, onSuccess }: SignupModalProps) {
           />
         </div>
         
-        <div className="relative flex items-center w-full max-w-[18rem]">
+        <div className="relative flex items-center w-full ">
           <input
             type={showPassword ? "text" : "password"}
             name="password"
@@ -128,7 +128,7 @@ export default function SignupModal({ onLogin, onSuccess }: SignupModalProps) {
           </button>
         </div>
         
-        <div className="relative flex items-center w-full max-w-[18rem]">
+        <div className="relative flex items-center w-full ">
           <input
             type={showConfirmPassword ? "text" : "password"}
             name="confirmPassword"
@@ -154,7 +154,7 @@ export default function SignupModal({ onLogin, onSuccess }: SignupModalProps) {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full max-w-[18rem] bg-[#FF6961] hover:bg-[#FF6961] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2 px-6 rounded-full shadow-md"
+          className="w-full  bg-[#FF6961] hover:bg-[#FF6961] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2 px-6 rounded-full shadow-md"
         >
           {isLoading ? 'Creating Account...' : 'Sign Up'}
         </button>
