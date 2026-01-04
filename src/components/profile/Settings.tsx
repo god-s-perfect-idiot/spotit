@@ -1,6 +1,21 @@
-import { Info } from "lucide-react";
+import { Info, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../store/hooks";
+import { logout } from "../../store/authSlice";
 
 export default function Settings() {
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
+    const handleLogout = async () => {
+        try {
+            await dispatch(logout()).unwrap();
+            navigate('/login');
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
+
     return (
         <div className="flex flex-col gap-4">
             <span className="text-lg font-semibold">Settings</span>
@@ -17,6 +32,13 @@ export default function Settings() {
                     <span className="font-semibold">Privacy Settings</span>
                     <Info size={18} className="text-gray-500" />
                 </div>
+                <button
+                    onClick={handleLogout}
+                    className="flex flex-row gap-1 justify-between items-center p-2 rounded-lg hover:bg-red-100 transition-colors"
+                >
+                    <span className="font-semibold text-red-600">Logout</span>
+                    <LogOut size={18} className="text-red-600" />
+                </button>
             </div>
         </div>
     )

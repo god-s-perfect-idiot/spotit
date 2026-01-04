@@ -35,7 +35,32 @@ A modern React application built with TypeScript, Tailwind CSS, and Capacitor fo
    npm install
    ```
 
-3. **Start development server**
+3. **Set up Firebase**
+   - Go to [Firebase Console](https://console.firebase.google.com/)
+   - Create a new project or use an existing one
+   - Enable Authentication:
+     - Go to Authentication > Sign-in method
+     - Enable Email/Password
+     - Enable Google
+     - Enable Apple (if needed)
+   - Create a Firestore database:
+     - Go to Firestore Database
+     - Create database in production mode (or test mode for development)
+   - Get your Firebase config:
+     - Go to Project Settings > General
+     - Scroll down to "Your apps" and click the web icon (</>)
+     - Register your app and copy the config values
+   - Create a `.env` file in the root directory:
+     ```env
+     VITE_FIREBASE_API_KEY=your-api-key-here
+     VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+     VITE_FIREBASE_PROJECT_ID=your-project-id
+     VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
+     VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
+     VITE_FIREBASE_APP_ID=your-app-id
+     ```
+
+4. **Start development server**
    ```bash
    npm run dev
    ```

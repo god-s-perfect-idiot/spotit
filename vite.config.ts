@@ -43,4 +43,10 @@ export default defineConfig({
       }
     })
   ],
+  server: {
+    port: 4422,
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin-allow-popups'
+    }
+  },
 })
