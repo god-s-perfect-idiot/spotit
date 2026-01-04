@@ -197,7 +197,9 @@ export default function Onboarding() {
               ? 'animate-slide-in-from-left'
               : ''
           }`}
-          onAnimationEnd={() => setSlideDirection(null)}
+          onAnimationEnd={() => {
+            setSlideDirection(null);
+          }}
         >
           {renderStep()}
         </div>

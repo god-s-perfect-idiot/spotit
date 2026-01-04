@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import { updateUser } from "../../store/authSlice";
-import { Plus, X, XCircle } from "lucide-react";
+import { Plus, XCircle } from "lucide-react";
 
 interface HealthConditionsStepProps {
   onComplete: () => void;

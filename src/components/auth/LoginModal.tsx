@@ -44,8 +44,9 @@ export default function LoginModal({ onSignup, onSuccess }: LoginModalProps) {
         password: credentials.password,
       })).unwrap();
       // onSuccess will be called via useEffect when isAuthenticated becomes true
-    } catch (error) {
+    } catch (error: unknown) {
       // Error is handled by Redux state
+      console.error("Error logging in:", error);
     }
   };
 
@@ -63,8 +64,9 @@ export default function LoginModal({ onSignup, onSuccess }: LoginModalProps) {
     try {
       await dispatch(loginWithGoogle()).unwrap();
       // onSuccess will be called via useEffect when isAuthenticated becomes true
-    } catch (error) {
+    } catch (error: unknown) {
       // Error is handled by Redux state (popup closed errors are silently ignored)
+      console.error("Error logging in with Google:", error);
     }
   };
 
@@ -74,8 +76,9 @@ export default function LoginModal({ onSignup, onSuccess }: LoginModalProps) {
     try {
       await dispatch(loginWithApple()).unwrap();
       // onSuccess will be called via useEffect when isAuthenticated becomes true
-    } catch (error) {
+    } catch (error: unknown) {
       // Error is handled by Redux state (popup closed errors are silently ignored)
+      console.error("Error logging in with Apple:", error);
     }
   };
 

@@ -1,30 +1,19 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { isAuthenticated, getCurrentUser, type UserData } from '../utils/api';
+import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../store/hooks";
 
 export default function Landing() {
   const navigate = useNavigate();
-  const [user, setUser] = useState<UserData | null>(null);
-
-  useEffect(() => {
-    const loadUser = async () => {
-      if (isAuthenticated()) {
-        const userData = await getCurrentUser();
-        setUser(userData);
-      }
-    };
-    loadUser();
-  }, []);
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
   const handleLogin = () => {
-    navigate('/login');
+    navigate("/login");
   };
 
   const handleGetStarted = () => {
-    if (isAuthenticated()) {
-      navigate('/home');
+    if (isAuthenticated) {
+      navigate("/home");
     } else {
-      navigate('/login');
+      navigate("/login");
     }
   };
 
@@ -39,12 +28,14 @@ export default function Landing() {
             </div>
             <span className="text-xl font-bold text-gray-800">Spot It</span>
           </div>
-          
-          {isAuthenticated() ? (
+
+          {isAuthenticated ? (
             <div className="flex items-center space-x-4">
-              <span className="text-gray-600">Welcome, {user?.name || 'User'}!</span>
+              <span className="text-gray-600">
+                Welcome, {user?.name || "User"}!
+              </span>
               <button
-                onClick={() => navigate('/home')}
+                onClick={() => navigate("/home")}
                 className="bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600 transition-colors"
               >
                 Go to App
@@ -68,9 +59,10 @@ export default function Landing() {
             Track Your
             <span className="text-pink-500"> Wellness Journey</span>
           </h1>
-          
+
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Spot It helps you understand your cycle, track your health, and make informed decisions about your wellness.
+            Spot It helps you understand your cycle, track your health, and make
+            informed decisions about your wellness.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -78,10 +70,10 @@ export default function Landing() {
               onClick={handleGetStarted}
               className="bg-pink-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-pink-600 transition-colors shadow-lg"
             >
-              {isAuthenticated() ? 'Continue to App' : 'Get Started'}
+              {isAuthenticated ? "Continue to App" : "Get Started"}
             </button>
-            
-            {!isAuthenticated() && (
+
+            {!isAuthenticated && (
               <button
                 onClick={handleLogin}
                 className="border-2 border-pink-500 text-pink-500 px-8 py-4 rounded-full text-lg font-semibold hover:bg-pink-50 transition-colors"
@@ -99,33 +91,41 @@ export default function Landing() {
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
             Why Choose Spot It?
           </h2>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">📊</span>
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Cycle Tracking</h3>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                Cycle Tracking
+              </h3>
               <p className="text-gray-600">
-                Monitor your menstrual cycle with precision and get insights into your patterns.
+                Monitor your menstrual cycle with precision and get insights
+                into your patterns.
               </p>
             </div>
-            
+
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">💊</span>
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Health Insights</h3>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                Health Insights
+              </h3>
               <p className="text-gray-600">
-                Track symptoms, moods, and health metrics to better understand your body.
+                Track symptoms, moods, and health metrics to better understand
+                your body.
               </p>
             </div>
-            
+
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">📱</span>
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">Mobile First</h3>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                Mobile First
+              </h3>
               <p className="text-gray-600">
                 Access your data anywhere with our mobile app and PWA support.
               </p>
