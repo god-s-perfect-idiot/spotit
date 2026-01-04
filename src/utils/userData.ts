@@ -1,4 +1,4 @@
-import { doc, updateDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { doc, updateDoc, serverTimestamp, Timestamp, type FieldValue } from 'firebase/firestore';
 import { db } from './firebase';
 import { getCurrentFirebaseUser } from './firebaseAuth';
 
@@ -13,7 +13,7 @@ export const updateUserData = async (data: { birthdate?: Date; lastPeriodStart?:
     const userRef = doc(db, 'users', firebaseUser.uid);
     
     // Convert Date objects to Firestore Timestamp if needed
-    const updateData: { [key: string]: unknown } = {
+    const updateData: { [key: string]: unknown | FieldValue } = {
       ...data,
       updatedAt: serverTimestamp(),
     };
@@ -28,7 +28,9 @@ export const updateUserData = async (data: { birthdate?: Date; lastPeriodStart?:
       updateData.lastPeriodStart = Timestamp.fromDate(data.lastPeriodStart);
     }
 
-    await updateDoc(userRef, updateData);
+    // Type assertion needed due to Firestore's complex type system
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await updateDoc(userRef, updateData as any);
     
     console.log('User data updated successfully');
   } catch (error) {
