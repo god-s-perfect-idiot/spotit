@@ -21,7 +21,7 @@ export default function DatePicker({
   const currentYear = new Date().getFullYear();
   const defaultMaxYear = maxYear ?? currentYear;
   const defaultMinYear = minYear ?? currentYear - 100;
-  
+
   const [selectedMonth, setSelectedMonth] = useState(value.getMonth());
   const [selectedYear, setSelectedYear] = useState(value.getFullYear());
   const [selectedDay, setSelectedDay] = useState(value.getDate());
@@ -44,7 +44,7 @@ export default function DatePicker({
   // Generate years from maxYear down to minYear
   const years = Array.from(
     { length: defaultMaxYear - defaultMinYear + 1 },
-    (_, i) => defaultMaxYear - i
+    (_, i) => defaultMaxYear - i,
   );
 
   // Sync internal state with external value prop
@@ -100,7 +100,7 @@ export default function DatePicker({
           value={formatDate(value)}
           readOnly
           placeholder={placeholder}
-          className="w-full px-4 py-3 rounded-full border-[1px] border-[#ff6961] bg-white text-gray-800 cursor-pointer focus:outline-none"
+          className="w-full px-4 py-3 font-medium rounded-full border-[2px] border-[#ff6961] bg-white text-gray-800 cursor-pointer focus:outline-none"
         />
         <span className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-[#ff6961] rounded-full">
           <Calendar size={20} className="text-white" />
@@ -111,11 +111,11 @@ export default function DatePicker({
       <div className="bg-[#F9D1CD] rounded-2xl p-4 mb-6">
         {/* Month and Year Dropdowns */}
         <div className="flex gap-3 mb-4">
-          <div className="relative flex-1">
+          <div className="flex-1 flex w-full w-full px-4 py-2 font-medium rounded-full border-[2px] border-[#ff6961] bg-white text-gray-800 appearance-none cursor-pointer focus:outline-none items-center h-full justify-between">
             <select
               value={selectedMonth}
               onChange={(e) => handleMonthChange(Number(e.target.value))}
-              className="w-full px-4 py-2 rounded-full border-[1px] border-[#ff6961] bg-white text-gray-800 appearance-none cursor-pointer focus:outline-none"
+              className="appearance-none"
             >
               {months.map((month, index) => (
                 <option key={index} value={index}>
@@ -125,14 +125,15 @@ export default function DatePicker({
             </select>
             <ChevronDown
               size={16}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black pointer-events-none"
+              className="text-black pointer-events-none"
+              strokeWidth={2}
             />
           </div>
-          <div className="relative flex-1">
+          <div className="flex flex-1 w-full px-4 py-2 font-medium rounded-full border-[2px] border-[#ff6961] bg-white text-gray-800 appearance-none cursor-pointer focus:outline-none items-center h-full justify-between">
             <select
               value={selectedYear}
               onChange={(e) => handleYearChange(Number(e.target.value))}
-              className="w-full px-4 py-2 rounded-full border-[1px] border-[#ff6961] bg-white text-gray-800 appearance-none cursor-pointer focus:outline-none"
+              className="appearance-none"
             >
               {years.map((year) => (
                 <option key={year} value={year}>
@@ -142,7 +143,8 @@ export default function DatePicker({
             </select>
             <ChevronDown
               size={16}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black pointer-events-none"
+              className="text-black pointer-events-none"
+              strokeWidth={2}
             />
           </div>
         </div>
@@ -171,7 +173,7 @@ export default function DatePicker({
               onClick={() => handleDaySelect(day)}
               className={`h-10 w-10 flex items-center justify-center text-sm font-medium transition-colors ${
                 day === selectedDay
-                  ? "border-[1px] border-[#ff6961] bg-white text-black rounded-2xl"
+                  ? "border-[2px] border-[#ff6961] bg-white text-black rounded-2xl"
                   : "text-gray-800 hover:bg-white/50"
               }`}
             >
@@ -183,4 +185,3 @@ export default function DatePicker({
     </div>
   );
 }
-

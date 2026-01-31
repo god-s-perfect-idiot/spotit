@@ -43,7 +43,7 @@ export default function CycleLengthStep({ onNext }: CycleLengthStepProps) {
       await dispatch(
         updateUser({
           cycleLength: isNotSure ? null : cycleLength,
-        })
+        }),
       ).unwrap();
       onNext();
     } catch (error) {
@@ -58,7 +58,7 @@ export default function CycleLengthStep({ onNext }: CycleLengthStepProps) {
   return (
     <>
       <CycleLengthNotSureModal isOpen={showModal} onClose={handleModalClose} />
-      
+
       <div className="flex flex-col items-center justify-between h-full min-h-screen text-center pb-24 px-4">
         <div className="w-full max-w-md mt-24">
           <h2 className="text-2xl font-semibold text-gray-800 mb-2 text-center">
@@ -71,7 +71,7 @@ export default function CycleLengthStep({ onNext }: CycleLengthStepProps) {
 
           {/* Cycle Length Selector */}
           <div className="mb-4">
-            <div className="relative flex items-center justify-center bg-white rounded-full border-[1px] border-[#ff6961] px-2 py-2">
+            <div className="relative flex items-center justify-center bg-white rounded-full border-[2px] border-[#ff6961] px-2 py-2">
               <button
                 onClick={handleDecrement}
                 disabled={cycleLength <= 1}
@@ -101,7 +101,7 @@ export default function CycleLengthStep({ onNext }: CycleLengthStepProps) {
           <div className="mb-6">
             <button
               onClick={handleNotSure}
-              className={`w-full bg-white text-lg font-medium rounded-full border-[1px] border-[#ff6961] px-4 py-3 text-gray-800 transition-colors ${
+              className={`w-full bg-white text-lg font-medium rounded-full border-[2px] font-medium border-[#ff6961] px-4 py-3 text-gray-800 transition-colors ${
                 isNotSure ? "!bg-[#ff6961] text-white" : ""
               }`}
             >

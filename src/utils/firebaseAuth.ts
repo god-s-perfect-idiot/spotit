@@ -2,8 +2,6 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
   signOut,
   onAuthStateChanged,
   sendPasswordResetEmail,
@@ -178,55 +176,34 @@ export const signInWithEmail = async (
   }
 };
 
-// Check if we're in a Capacitor native environment
-const isCapacitor = (): boolean => {
-  return typeof window !== 'undefined' && 
-    typeof (window as { Capacitor?: unknown }).Capacitor !== 'undefined';
-};
-
 // Google Sign In
 export const signInWithGoogle = async (): Promise<{
   user: UserData;
   firebaseUser: User;
 }> => {
   try {
-    // Use redirect for Capacitor native apps, popup for web
-    if (isCapacitor()) {
-      // For native apps, use redirect
-      await signInWithRedirect(auth, googleProvider);
-      // The redirect will navigate away, so we throw a special error
-      // The actual result will be handled by getRedirectResult
-      throw new Error("REDIRECT_INITIATED");
-    } else {
-      // For web, use popup
-      const result = await signInWithPopup(auth, googleProvider);
-      const firebaseUser = result.user;
+    // Use popup for both web and Capacitor (Capacitor WebView can handle popups)
+    const result = await signInWithPopup(auth, googleProvider);
+    const firebaseUser = result.user;
 
-      const userData = await saveUserToFirestore(firebaseUser, {
-        name: firebaseUser.displayName || firebaseUser.email?.split("@")[0],
-      });
+    const userData = await saveUserToFirestore(firebaseUser, {
+      name: firebaseUser.displayName || firebaseUser.email?.split("@")[0],
+    });
 
-      return { user: userData, firebaseUser };
-    }
+    return { user: userData, firebaseUser };
   } catch (error: unknown) {
-    // Allow redirect initiation to pass through
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    if (errorMessage === "REDIRECT_INITIATED") {
-      throw error;
-    }
-    
     // Don't throw error if user intentionally closed the popup
     const errorCode = error && typeof error === 'object' && 'code' in error 
       ? String(error.code) 
       : undefined;
-    const errorMessageFromCode = error && typeof error === 'object' && 'message' in error 
+    const errorMessage = error && typeof error === 'object' && 'message' in error 
       ? String(error.message) 
       : undefined;
     if (errorCode === "auth/popup-closed-by-user") {
       // Return a special error that can be handled silently
       throw new Error("POPUP_CLOSED");
     }
-    throw new Error(getAuthErrorMessage(errorCode || errorMessageFromCode));
+    throw new Error(getAuthErrorMessage(errorCode || errorMessage));
   }
 };
 
@@ -236,43 +213,28 @@ export const signInWithApple = async (): Promise<{
   firebaseUser: User;
 }> => {
   try {
-    // Use redirect for Capacitor native apps, popup for web
-    if (isCapacitor()) {
-      // For native apps, use redirect
-      await signInWithRedirect(auth, appleProvider);
-      // The redirect will navigate away, so we throw a special error
-      // The actual result will be handled by getRedirectResult
-      throw new Error("REDIRECT_INITIATED");
-    } else {
-      // For web, use popup
-      const result = await signInWithPopup(auth, appleProvider);
-      const firebaseUser = result.user;
+    // Use popup for both web and Capacitor (Capacitor WebView can handle popups)
+    const result = await signInWithPopup(auth, appleProvider);
+    const firebaseUser = result.user;
 
-      const userData = await saveUserToFirestore(firebaseUser, {
-        name: firebaseUser.displayName || firebaseUser.email?.split("@")[0],
-      });
+    const userData = await saveUserToFirestore(firebaseUser, {
+      name: firebaseUser.displayName || firebaseUser.email?.split("@")[0],
+    });
 
-      return { user: userData, firebaseUser };
-    }
+    return { user: userData, firebaseUser };
   } catch (error: unknown) {
-    // Allow redirect initiation to pass through
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    if (errorMessage === "REDIRECT_INITIATED") {
-      throw error;
-    }
-    
     // Don't throw error if user intentionally closed the popup
     const errorCode = error && typeof error === 'object' && 'code' in error 
       ? String(error.code) 
       : undefined;
-    const errorMessageFromCode = error && typeof error === 'object' && 'message' in error 
+    const errorMessage = error && typeof error === 'object' && 'message' in error 
       ? String(error.message) 
       : undefined;
     if (errorCode === "auth/popup-closed-by-user") {
       // Return a special error that can be handled silently
       throw new Error("POPUP_CLOSED");
     }
-    throw new Error(getAuthErrorMessage(errorCode || errorMessageFromCode));
+    throw new Error(getAuthErrorMessage(errorCode || errorMessage));
   }
 };
 
@@ -284,27 +246,6 @@ export const logout = async (): Promise<void> => {
     localStorage.removeItem("currentUser");
   } catch {
     throw new Error("Failed to sign out");
-  }
-};
-
-// Get redirect result (call this after redirect sign-in on mobile)
-export const getAuthRedirectResult = async (): Promise<{
-  user: UserData;
-  firebaseUser: User;
-} | null> => {
-  try {
-    const result = await getRedirectResult(auth);
-    if (result && result.user) {
-      const firebaseUser = result.user;
-      const userData = await saveUserToFirestore(firebaseUser, {
-        name: firebaseUser.displayName || firebaseUser.email?.split("@")[0],
-      });
-      return { user: userData, firebaseUser };
-    }
-    return null;
-  } catch (error) {
-    console.error('Error getting redirect result:', error);
-    return null;
   }
 };
 

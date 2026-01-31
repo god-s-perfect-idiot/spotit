@@ -7,7 +7,7 @@ export default function HeroStep({ onNext }: HeroStepProps) {
     <div className="flex flex-col items-center justify-end min-h-screen text-center pb-24">
 
       {/* Hero Image if available */}
-      <div className="mb-12 bg-[#f6beb9] rounded-3xl p-4 shadow-md drop-shadow-md">
+      <div className="mb-12 mt-4 bg-[#f6beb9] rounded-3xl p-4 shadow-md drop-shadow-md">
         <img
           src="/onboarding-hero.png"
           alt="Welcome to Spot It"

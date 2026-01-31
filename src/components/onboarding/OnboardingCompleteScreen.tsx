@@ -53,7 +53,7 @@ export default function OnboardingCompleteScreen() {
 
     const animate = () => {
       const elapsed = Date.now() - startTime;
-      
+
       if (elapsed >= duration) {
         setPercentage(100);
         // Complete onboarding and navigate after animation finishes
@@ -78,7 +78,7 @@ export default function OnboardingCompleteScreen() {
             const segmentProgress = Math.min(segmentElapsed / segmentTime, 1);
             currentPercent = Math.round(
               prevStop.percent +
-                (nextStop.percent - prevStop.percent) * segmentProgress
+                (nextStop.percent - prevStop.percent) * segmentProgress,
             );
           }
           break;
@@ -111,10 +111,18 @@ export default function OnboardingCompleteScreen() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
       {/* Progress Circle Section */}
-      <div className="flex flex-col items-center mb-16 relative overflow-hidden" style={{ width: '20rem', height: '20rem' }}>
+      <div
+        className="flex flex-col items-center mb-16 relative overflow-hidden"
+        style={{ width: "22rem", height: "22rem" }}
+      >
         {/* Spinning gradient circle (processing indicator) */}
         <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-          <svg width="20rem" height="20rem" className="animate-spin" style={{ animationDuration: "3s" }}>
+          <svg
+            width="22rem"
+            height="22rem"
+            className="animate-spin"
+            style={{ animationDuration: "3s" }}
+          >
             <defs>
               <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#FF4F46" />
@@ -122,8 +130,8 @@ export default function OnboardingCompleteScreen() {
               </linearGradient>
             </defs>
             <circle
-              cx="10rem"
-              cy="10rem"
+              cx="11rem"
+              cy="11rem"
               r={radius}
               fill="none"
               stroke="url(#gradient)"
@@ -135,15 +143,17 @@ export default function OnboardingCompleteScreen() {
         {/* Content inside circle */}
         <div className="relative z-10 flex flex-col items-center justify-center px-8 py-12 w-full h-full">
           {/* Percentage text */}
-          <span className="text-5xl font-bold text-[#FF4F46] mb-4">{percentage}%</span>
+          <span className="text-5xl font-bold text-[#FF4F46] mb-4">
+            {percentage}%
+          </span>
 
           {/* Title and Description */}
-          <span className="text-xl font-medium text-black mb-2 text-center w-full">
+          <span className="text-xl font-medium text-black mb-2 text-center w-full max-w-[13rem]">
             Setting up your personal cycle guide...
           </span>
-          <p className="text-black text-sm text-center w-full">
-            We're building your first forecast, selecting your best insights, and tailoring
-            content just for you.
+          <p className="text-black text-sm text-center w-full max-w-[13rem]">
+            We're building your first forecast, selecting your best insights,
+            and tailoring content just for you.
           </p>
         </div>
       </div>
@@ -152,7 +162,11 @@ export default function OnboardingCompleteScreen() {
       <div className="flex flex-col items-center max-w-[15rem]">
         {/* Illustration placeholder - you can add an SVG illustration here */}
         <div className="mb-6 flex items-center justify-center">
-          <img src="/fact-hero.png" alt="Onboarding Complete" className="w-full max-w-[15rem]" />
+          <img
+            src="/fact-hero.png"
+            alt="Onboarding Complete"
+            className="w-full max-w-[15rem]"
+          />
         </div>
 
         {/* Fact Text */}
@@ -171,5 +185,3 @@ export default function OnboardingCompleteScreen() {
     </div>
   );
 }
-
- 

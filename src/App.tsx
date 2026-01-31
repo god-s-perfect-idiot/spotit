@@ -5,9 +5,8 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { store, persistor } from './store/store'
 import { useAppSelector, useAppDispatch } from './store/hooks'
 import { checkAuthState } from './store/authSlice'
-import { onAuthStateChange, getAuthRedirectResult } from './utils/firebaseAuth'
+import { onAuthStateChange } from './utils/firebaseAuth'
 import Layout from './Layout'
-import Landing from './pages/Landing'
 import MultiStageLogin from './components/auth/MultiStageLogin'
 import Onboarding from './pages/Onboarding'
 import Home from './pages/Home'
@@ -20,21 +19,6 @@ function AuthStateObserver() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    // Check for redirect result first (for mobile OAuth flows)
-    const checkRedirectResult = async () => {
-      try {
-        const redirectResult = await getAuthRedirectResult();
-        if (redirectResult) {
-          // User signed in via redirect, check auth state to update Redux
-          await dispatch(checkAuthState(redirectResult.firebaseUser));
-        }
-      } catch (error) {
-        console.error('Error checking redirect result:', error);
-      }
-    };
-
-    checkRedirectResult();
-
     // Set up Firebase auth state observer
     const unsubscribe = onAuthStateChange(async (firebaseUser) => {
       await dispatch(checkAuthState(firebaseUser));
@@ -105,7 +89,7 @@ function AppContent() {
       <AuthStateObserver />
       <Routes>
         {/* Public routes */}
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<MultiStageLogin />} />
         
         {/* Onboarding route - separate from Layout */}

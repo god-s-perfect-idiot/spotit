@@ -22,6 +22,7 @@
     "@reduxjs/toolkit": "^2.2.7",
     "@tailwindcss/vite": "^4.1.12",
     "firebase": "^12.6.0",
+    "ldrs": "^1.1.9",
     "lucide-react": "^0.539.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

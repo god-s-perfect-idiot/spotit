@@ -28,9 +28,9 @@ export default function HealthConditionsStep({
   onComplete,
 }: HealthConditionsStepProps) {
   const dispatch = useAppDispatch();
-  const [selectedConditions, setSelectedConditions] = useState<Set<HealthCondition>>(
-    new Set()
-  );
+  const [selectedConditions, setSelectedConditions] = useState<
+    Set<HealthCondition>
+  >(new Set());
   const [customConditions, setCustomConditions] = useState<string[]>([]);
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customInputValue, setCustomInputValue] = useState("");
@@ -114,7 +114,7 @@ export default function HealthConditionsStep({
             <button
               key={condition.value}
               onClick={() => handleConditionToggle(condition.value)}
-              className={`w-full bg-white rounded-full border-[1px] border-[#ff6961] px-4 py-3 text-black font-medium transition-colors text-center ${
+              className={`w-full bg-white rounded-full border-[2px] border-[#ff6961] px-4 py-3 text-black font-medium transition-colors text-center ${
                 selectedConditions.has(condition.value)
                   ? "!bg-[#ff6961] text-white"
                   : ""
@@ -131,7 +131,7 @@ export default function HealthConditionsStep({
             {customConditions.map((condition, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between w-full bg-white rounded-full border-[1px] border-[#ff6961] px-4 py-3"
+                className="flex items-center justify-between w-full bg-white rounded-full border-[2px] border-[#ff6961] px-4 py-3"
               >
                 <span className="text-black font-medium">{condition}</span>
                 <button
@@ -139,7 +139,7 @@ export default function HealthConditionsStep({
                   className="text-[#ff6961] font-bold text-lg"
                   aria-label="Remove condition"
                 >
-                  <XCircle size={24} strokeWidth={"1px"} />
+                  <XCircle size={24} strokeWidth={"2px"} />
                 </button>
               </div>
             ))}
@@ -149,7 +149,7 @@ export default function HealthConditionsStep({
         {/* Add Custom Condition Input */}
         {showCustomInput ? (
           <div className="mb-4">
-            <div className="flex gap-2 items-center">
+            <div className="flex flex-wrap justify-end gap-2 items-center">
               <input
                 type="text"
                 value={customInputValue}
@@ -163,7 +163,7 @@ export default function HealthConditionsStep({
                   }
                 }}
                 placeholder="Enter condition"
-                className="flex-1 px-4 py-3 rounded-full border-[1px] border-gray-300 bg-white text-black focus:outline-none focus:border-[#ff6961]"
+                className="flex-1 px-4 py-3 rounded-full font-medium border-[2px] border-gray-300 bg-white text-black focus:outline-none focus:border-[#ff6961]"
                 autoFocus
               />
               <button
@@ -178,7 +178,7 @@ export default function HealthConditionsStep({
         ) : (
           <button
             onClick={() => setShowCustomInput(true)}
-            className="w-full bg-white rounded-full border-[1px] border-gray-300 px-4 py-3 text-gray-500 font-medium mb-4 flex items-center justify-center gap-2"
+            className="w-full bg-white rounded-full border-[2px] border-gray-300 px-4 py-3 text-gray-500 font-medium mb-4 flex items-center justify-center gap-2"
           >
             <Plus size={20} />
             Add other conditions

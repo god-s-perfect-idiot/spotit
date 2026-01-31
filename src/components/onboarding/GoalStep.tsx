@@ -55,7 +55,7 @@ export default function GoalStep({ onNext }: GoalStepProps) {
             <button
               key={option.value}
               onClick={() => handleGoalSelect(option.value)}
-              className={`w-full bg-white rounded-full border-[1px] border-[#ff6961] px-4 py-3 text-black font-medium transition-colors text-center ${
+              className={`w-full bg-white rounded-full border-[2px] border-[#ff6961] px-4 py-3 text-black font-medium transition-colors text-center ${
                 selectedGoal === option.value
                   ? "!bg-[#ff6961] text-white"
                   : ""
