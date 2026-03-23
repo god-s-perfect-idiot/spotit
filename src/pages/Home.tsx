@@ -4,8 +4,11 @@ import DayBrief from '../components/home/DayBrief';
 import CycleGuides from '../components/home/CycleGuides';
 import Blogs from '../components/Blogs';
 import Notifications from '../components/Notifications';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
+  const navigate = useNavigate();
+
   return (
     <div className="flex-1 p-6 flex flex-col gap-4">
       <div className="flex flex-row gap-4 justify-between items-center">
@@ -16,7 +19,10 @@ export default function Home() {
       <DateCycle />
       <DayBrief />
       <div className="flex flex-row gap-4 justify-between">
-        <button className="flex justify-center items-center border border-2 border-[#FF6961] text-black bg-white rounded-full w-1/2 text-base  py-2 px-1 font-medium">
+        <button
+          onClick={() => navigate('/log')}
+          className="flex justify-center items-center border border-2 border-[#FF6961] text-black bg-white rounded-full w-1/2 text-base  py-2 px-1 font-medium"
+        >
           Log Period
         </button>
         <button className="flex justify-center items-center border border-2 border-[#FFD34A] text-black bg-white rounded-full w-1/2 text-base  py-2 px-1 font-medium">

@@ -12,7 +12,6 @@ import {
   type UserData,
 } from '../utils/firebaseAuth';
 import { updateUserData } from '../utils/userData';
-import type { User } from 'firebase/auth';
 
 export interface AuthState {
   user: UserData | null;
@@ -118,14 +117,19 @@ export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValu
 // Async thunk for checking auth state
 export const checkAuthState = createAsyncThunk(
   'auth/checkAuthState',
-  async (firebaseUser: User | null, { rejectWithValue }) => {
-    if (!firebaseUser) {
+  async (uid: string | null, { rejectWithValue }) => {
+    if (!uid) {
       return null;
     }
 
     try {
+      const firebaseUser = getCurrentFirebaseUser();
+      if (!firebaseUser || firebaseUser.uid !== uid) {
+        return null;
+      }
+
       const token = await firebaseUser.getIdToken();
-      let userData = await getUserData(firebaseUser.uid);
+      let userData = await getUserData(uid);
       
       if (!userData) {
         // If user data doesn't exist in Firestore, create it

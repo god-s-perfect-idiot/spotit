@@ -34,6 +34,24 @@ export interface UserData {
   updatedAt?: Date; // Date object (converted from Firestore Timestamp when reading)
 }
 
+const stripUndefinedDeep = <T>(value: T): T => {
+  if (Array.isArray(value)) {
+    return value
+      .filter((item): item is NonNullable<typeof item> => item !== undefined)
+      .map((item) => stripUndefinedDeep(item)) as T;
+  }
+
+  if (value && typeof value === "object") {
+    const cleanedEntries = Object.entries(value as Record<string, unknown>)
+      .filter(([, entryValue]) => entryValue !== undefined)
+      .map(([key, entryValue]) => [key, stripUndefinedDeep(entryValue)]);
+
+    return Object.fromEntries(cleanedEntries) as T;
+  }
+
+  return value;
+};
+
 // Save user data to Firestore
 export const saveUserToFirestore = async (
   user: User,
@@ -50,8 +68,8 @@ export const saveUserToFirestore = async (
         id: user.uid,
         email: user.email || "",
         name: user.displayName || user.email?.split("@")[0] || "User",
-        displayName: user.displayName ?? undefined,
-        photoURL: user.photoURL ?? undefined,
+        displayName: user.displayName || null,
+        photoURL: user.photoURL || null,
         completedOnboarding: false, // New users haven't completed onboarding
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
@@ -62,7 +80,7 @@ export const saveUserToFirestore = async (
         uid: user.uid,
         email: user.email,
       });
-      await setDoc(userRef, userDataForFirestore);
+      await setDoc(userRef, stripUndefinedDeep(userDataForFirestore));
       console.log("User document created successfully in Firestore");
       
       // Return UserData without serverTimestamp (will be converted to Date when read)
@@ -84,10 +102,10 @@ export const saveUserToFirestore = async (
       });
       await setDoc(
         userRef,
-        {
+        stripUndefinedDeep({
           updatedAt: serverTimestamp(),
           ...(additionalData || {}),
-        },
+        }),
         { merge: true }
       );
       console.log("User document updated successfully in Firestore");

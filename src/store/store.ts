@@ -21,8 +21,10 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        // Ignore Firestore Timestamp fields in user data
+        // Ignore Date-like fields in auth state
         ignoredPaths: ['auth.user.createdAt', 'auth.user.updatedAt', 'auth.user.birthdate', 'auth.user.lastPeriodStart'],
+        // Ignore the same Date-like fields when they appear in action payloads
+        ignoredActionPaths: ['payload.user.createdAt', 'payload.user.updatedAt', 'payload.user.birthdate', 'payload.user.lastPeriodStart'],
       },
     }),
 });
