@@ -14,7 +14,9 @@ import Insights from './pages/Insights'
 import Read from './pages/Read'
 import Profile from './pages/Profile'
 import Log from './pages/Log'
+import BriefPage from './pages/BriefPage'
 import { ToastProvider } from './components/ui-kit/ToastProvider'
+import { NavbarVisibilityProvider } from './context/NavbarVisibilityContext'
 
 // Auth state observer component
 function AuthStateObserver() {
@@ -131,24 +133,27 @@ function LoginRoute() {
 function AppContent() {
   return (
     <Router>
-      <AuthStateObserver />
-      <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<RootRoute />} />
-        <Route path="/login" element={<LoginRoute />} />
-        
-        {/* Onboarding route - separate from Layout */}
-        <Route path="/onboarding" element={<OnboardingRoute />} />
-        
-        {/* Protected routes with Layout */}
-        <Route element={<Layout />}>
-          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="/log" element={<ProtectedRoute><Log /></ProtectedRoute>} />
-          <Route path="/insights" element={<ProtectedRoute><Insights /></ProtectedRoute>} />
-          <Route path="/read" element={<ProtectedRoute><Read /></ProtectedRoute>} />
-          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-        </Route>
-      </Routes>
+      <NavbarVisibilityProvider>
+        <AuthStateObserver />
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<RootRoute />} />
+          <Route path="/login" element={<LoginRoute />} />
+
+          {/* Onboarding route - separate from Layout */}
+          <Route path="/onboarding" element={<OnboardingRoute />} />
+
+          {/* Protected routes with Layout */}
+          <Route element={<Layout />}>
+            <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="/log" element={<ProtectedRoute><Log /></ProtectedRoute>} />
+            <Route path="/brief-page" element={<ProtectedRoute><BriefPage /></ProtectedRoute>} />
+            <Route path="/insights" element={<ProtectedRoute><Insights /></ProtectedRoute>} />
+            <Route path="/read" element={<ProtectedRoute><Read /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          </Route>
+        </Routes>
+      </NavbarVisibilityProvider>
     </Router>
   )
 }

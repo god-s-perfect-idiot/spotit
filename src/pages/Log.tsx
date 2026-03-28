@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PlusCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { createPeriodLog } from '../utils/periodLogs';
 import { useToast } from '../components/ui-kit/ToastProvider';
+import { useNavbarVisibility } from '../context/NavbarVisibilityContext';
 
 type LogSection = {
   title: string;
@@ -166,11 +167,20 @@ function Chip({
 export default function Log() {
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const { hideNavbar, showNavbar } = useNavbarVisibility();
   const [selectedBySection, setSelectedBySection] = useState<Record<string, Set<string>>>({});
   const [customOptionsBySection, setCustomOptionsBySection] = useState<Record<string, CustomOption[]>>(
     {}
   );
   const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    hideNavbar();
+
+    return () => {
+      showNavbar();
+    };
+  }, [hideNavbar, showNavbar]);
 
   const toggleOption = (sectionTitle: string, optionId: string) => {
     setSelectedBySection((prev) => {
@@ -297,19 +307,19 @@ export default function Log() {
       await createPeriodLog({
         sections,
       });
-      showToast('Your log has been saved successfully.', 'success');
+      showToast('Day logged queen, slay!.', 'success');
       navigate('/home');
     } catch (error) {
       console.error('Failed to save period log:', error);
-      showToast('Could not save your log right now. Please try again.', 'error');
+      showToast('ooopsies.', 'error');
     } finally {
       setIsSaving(false);
     }
   };
 
   return (
-    <div className="flex-1 bg-[#FFE9E5] px-6 pt-8 pb-28 overflow-y-auto">
-      <div className="flex items-center justify-between mb-6">
+    <div className="flex min-h-0 flex-1 flex-col bg-[#FFE9E5] px-6 py-8">
+      <div className="mb-6 flex shrink-0 items-center justify-between">
         <h1 className="text-2xl leading-[1] font-semibold text-[#111111] ml-3">Log Your Day</h1>
         <button
           onClick={() => navigate(-1)}
@@ -321,7 +331,7 @@ export default function Log() {
         </button>
       </div>
 
-      <div className="flex flex-col gap-6">
+      <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto overscroll-y-contain">
         {mergedSections.map((section) => (
           <section key={section.title}>
             <h2 className="text-lg font-semibold text-[#111111] mb-3 ml-3">{section.title}</h2>
@@ -363,7 +373,7 @@ export default function Log() {
                 onClick={() => addCustomOption(section.title)}
                 className="rounded-full border border-dashed border-[#33B1FF] bg-white px-4 py-1 text-sm font-semibold text-[#33B1FF] transition-colors hover:bg-[#EAF8FF] flex items-center gap-1"
               >
-                <PlusCircle size={16} />
+                <PlusCircle size={16} strokeWidth={2} />
                 Add
               </button>
             </div>
@@ -373,7 +383,7 @@ export default function Log() {
       <button
         onClick={handleSaveLog}
         disabled={isSaving}
-        className={`mt-4 w-full bg-[#FF6961] text-white font-bold text-lg py-2 px-12 max-w-[22rem] rounded-full shadow-md mt-2 mb-4 disabled:opacity-60 disabled:cursor-not-allowed ${!buildPeriodLogSections().some((section) => section.selectedOptions.length > 0) ? 'opacity-20 cursor-not-allowed' : ''}`}
+        className={`mt-8 shrink-0 w-full bg-[#FF6961] text-white font-bold text-lg py-2 px-12 max-w-[22rem] rounded-full shadow-md mt-2 mb-4 disabled:opacity-60 disabled:cursor-not-allowed ${!buildPeriodLogSections().some((section) => section.selectedOptions.length > 0) ? 'opacity-20 cursor-not-allowed' : ''}`}
         type="button"
       >
         {isSaving ? 'Saving...' : 'Log Your Day'}

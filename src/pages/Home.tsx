@@ -20,13 +20,15 @@ export default function Home() {
       <DayBrief />
       <div className="flex flex-row gap-4 justify-between">
         <button
-          onClick={() => navigate('/log')}
-          className="flex justify-center items-center border border-2 border-[#FF6961] text-black bg-white rounded-full w-1/2 text-base  py-2 px-1 font-medium"
+          // onClick={() => navigate('/log')}
+          className="flex justify-center items-center border border-2 border-[#FF6961] text-[#FF6961] bg-white rounded-full w-1/2 text-base  py-2 px-1 font-bold"
         >
           Log Period
         </button>
-        <button className="flex justify-center items-center border border-2 border-[#FFD34A] text-black bg-white rounded-full w-1/2 text-base  py-2 px-1 font-medium">
-          Log Health & Habits
+        <button
+          onClick={() => navigate('/log')}
+          className="flex justify-center items-center border border-2 border-[#33B1FF] text-[#33B1FF] bg-white rounded-full w-1/2 text-base  py-2 px-1 font-bold">
+          Log Your Day
         </button>
       </div>
       <CycleGuides />

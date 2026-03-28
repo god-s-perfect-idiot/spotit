@@ -14,8 +14,7 @@ export const getPhaseColor = (phase: string) => {
 };
 
 export const getPhase = (_date: Date) => {
-  console.log("Getting phase for date:", _date);
-    // TODO: get phase from backend
+  // TODO: get phase from backend
     const phases = ["Luteal Phase", "Follicular Phase", "Ovulation", "Menstruation"];
     const phase = phases[Math.floor(Math.random() * phases.length)];
     return phase;

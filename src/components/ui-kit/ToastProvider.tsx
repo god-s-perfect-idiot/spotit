@@ -1,6 +1,5 @@
 import { createContext, useCallback, useContext, useMemo } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import toast, { Toaster } from 'react-hot-toast';
 
 type ToastType = 'success' | 'error' | 'info';
 
@@ -36,16 +35,21 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <ToastContainer
+      <Toaster
         position="top-center"
-        autoClose={2800}
-        hideProgressBar
-        closeOnClick
-        pauseOnHover
-        draggable
-        newestOnTop
-        theme="colored"
-        style={{ zIndex: 99999 }}
+        gutter={8}
+        containerStyle={{ zIndex: 99999 }}
+        toastOptions={{
+          duration: 2800,
+          style: {
+            background: '#33B1FF',
+            color: '#ffffff',
+            borderRadius: '30px',
+            padding: '10px',
+            fontSize: '16px',
+            fontWeight: 'bold',
+          },
+        }}
       />
     </ToastContext.Provider>
   );
