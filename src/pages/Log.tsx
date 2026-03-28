@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react';
 import { PlusCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { createPeriodLog } from '../utils/periodLogs';
+import {
+  createPeriodLog,
+  getLatestPeriodLogForLocalDay,
+  updatePeriodLog,
+  type PeriodLogSectionEntry,
+} from '../utils/periodLogs';
 import { useToast } from '../components/ui-kit/ToastProvider';
 import { useNavbarVisibility } from '../context/NavbarVisibilityContext';
+import { onAuthStateChange } from '../utils/firebaseAuth';
 
 type LogSection = {
   title: string;
@@ -141,6 +147,50 @@ const LOG_SECTIONS: LogSection[] = [
   },
 ];
 
+function buildPrefillFromSavedSections(
+  savedSections: PeriodLogSectionEntry[]
+): {
+  selectedBySection: Record<string, Set<string>>;
+  customOptionsBySection: Record<string, CustomOption[]>;
+} {
+  const knownTitles = new Set(LOG_SECTIONS.map((s) => s.title));
+  const presetLabelsByTitle = new Map(
+    LOG_SECTIONS.map((s) => [s.title, new Set(s.options)] as const)
+  );
+
+  const selectedBySection: Record<string, Set<string>> = {};
+  const customOptionsBySection: Record<string, CustomOption[]> = {};
+
+  for (const saved of savedSections) {
+    if (!knownTitles.has(saved.sectionTitle)) {
+      continue;
+    }
+
+    const presetLabels = presetLabelsByTitle.get(saved.sectionTitle)!;
+    const customs: CustomOption[] = (saved.customOptions ?? []).map((label, index) => ({
+      id: `custom-restore-${saved.sectionTitle}-${index}-${Math.random().toString(36).slice(2, 11)}`,
+      label,
+      isEditing: false,
+    }));
+    customOptionsBySection[saved.sectionTitle] = customs;
+
+    const selected = new Set<string>();
+    for (const label of saved.selectedOptions ?? []) {
+      if (presetLabels.has(label)) {
+        selected.add(`preset-${label}`);
+        continue;
+      }
+      const match = customs.find((c) => c.label === label);
+      if (match) {
+        selected.add(match.id);
+      }
+    }
+    selectedBySection[saved.sectionTitle] = selected;
+  }
+
+  return { selectedBySection, customOptionsBySection };
+}
+
 function Chip({
   label,
   isSelected,
@@ -173,6 +223,8 @@ export default function Log() {
     {}
   );
   const [isSaving, setIsSaving] = useState(false);
+  const [editingTodayLogId, setEditingTodayLogId] = useState<string | null>(null);
+  const [prefillReady, setPrefillReady] = useState(false);
 
   useEffect(() => {
     hideNavbar();
@@ -181,6 +233,36 @@ export default function Log() {
       showNavbar();
     };
   }, [hideNavbar, showNavbar]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const unsub = onAuthStateChange(() => {
+      void (async () => {
+        const existing = await getLatestPeriodLogForLocalDay();
+        if (cancelled) {
+          return;
+        }
+        if (existing) {
+          const { selectedBySection: sel, customOptionsBySection: customs } =
+            buildPrefillFromSavedSections(existing.sections);
+          setSelectedBySection(sel);
+          setCustomOptionsBySection(customs);
+          setEditingTodayLogId(existing.id);
+        } else {
+          setSelectedBySection({});
+          setCustomOptionsBySection({});
+          setEditingTodayLogId(null);
+        }
+        setPrefillReady(true);
+      })();
+    });
+
+    return () => {
+      cancelled = true;
+      unsub();
+    };
+  }, []);
 
   const toggleOption = (sectionTitle: string, optionId: string) => {
     setSelectedBySection((prev) => {
@@ -304,10 +386,15 @@ export default function Log() {
 
     try {
       setIsSaving(true);
-      await createPeriodLog({
-        sections,
-      });
-      showToast('Day logged queen, slay!.', 'success');
+      if (editingTodayLogId) {
+        await updatePeriodLog(editingTodayLogId, { sections });
+        showToast('Day updated queen, slay!.', 'success');
+      } else {
+        await createPeriodLog({
+          sections,
+        });
+        showToast('Day logged queen, slay!.', 'success');
+      }
       navigate('/home');
     } catch (error) {
       console.error('Failed to save period log:', error);
@@ -317,77 +404,93 @@ export default function Log() {
     }
   };
 
+  const isUpdateMode = Boolean(editingTodayLogId);
+
+  if (!prefillReady) {
+    return (
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center bg-[#FFE9E5] px-6 py-8">
+        <p className="text-base font-medium text-[#111111]">Loading…</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex min-h-0 flex-1 flex-col bg-[#FFE9E5] px-6 py-8">
-      <div className="mb-6 flex shrink-0 items-center justify-between">
-        <h1 className="text-2xl leading-[1] font-semibold text-[#111111] ml-3">Log Your Day</h1>
+    <div className="flex min-h-0 flex-1 flex-col bg-[#FFE9E5]">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain">
+        <header className="sticky top-0 z-10 flex w-full min-w-0 shrink-0 items-center justify-between border-b border-black/[0.06] bg-[#FFF0ED]/60 px-6 py-4 backdrop-blur-sm">
+          <h1 className="text-2xl font-semibold leading-[1] text-[#111111]">
+            {isUpdateMode ? 'Update your day' : 'Log Your Day'}
+          </h1>
+          <button
+            onClick={() => navigate(-1)}
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#B7B7B7] text-white"
+            aria-label="Close"
+            type="button"
+          >
+            <X size={16} />
+          </button>
+        </header>
+
+        <div className="flex flex-col gap-6 px-6 pb-6 pt-6">
+          {mergedSections.map((section) => (
+            <section key={section.title}>
+              <h2 className="text-lg font-semibold text-[#111111] mb-3 ml-3">{section.title}</h2>
+              <div className="rounded-3xl bg-[#FFD7D7] p-4 flex flex-wrap gap-3">
+                {section.options.map((option) =>
+                  option.isEditing ? (
+                    <input
+                      key={option.id}
+                      autoFocus
+                      type="text"
+                      value={option.label}
+                      onChange={(event) =>
+                        updateCustomOptionLabel(section.title, option.id, event.target.value)
+                      }
+                      onBlur={() => finalizeCustomOption(section.title, option.id)}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                          finalizeCustomOption(section.title, option.id);
+                        }
+                        if (event.key === 'Escape') {
+                          updateCustomOptionLabel(section.title, option.id, '');
+                          finalizeCustomOption(section.title, option.id);
+                        }
+                      }}
+                      className="rounded-full border border-[#33B1FF] bg-white px-4 py-1 text-sm font-semibold text-[#33B1FF] outline-none min-w-[120px]"
+                      placeholder="Type custom..."
+                    />
+                  ) : (
+                    <Chip
+                      key={option.id}
+                      label={option.label}
+                      isSelected={selectedBySection[section.title]?.has(option.id) ?? false}
+                      onClick={() => toggleOption(section.title, option.id)}
+                    />
+                  )
+                )}
+                <button
+                  type="button"
+                  onClick={() => addCustomOption(section.title)}
+                  className="rounded-full border border-dashed border-[#33B1FF] bg-white px-4 py-1 text-sm font-semibold text-[#33B1FF] transition-colors hover:bg-[#EAF8FF] flex items-center gap-1"
+                >
+                  <PlusCircle size={16} strokeWidth={2} />
+                  Add
+                </button>
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+      <div className="shrink-0 px-6 pb-8 pt-8">
         <button
-          onClick={() => navigate(-1)}
-          className="h-8 w-8 rounded-full bg-[#B7B7B7] text-white flex items-center justify-center"
-          aria-label="Close"
+          onClick={handleSaveLog}
+          disabled={isSaving}
+          className={`w-full max-w-[22rem] rounded-full bg-[#FF6961] px-12 py-2 text-lg font-bold text-white shadow-md disabled:cursor-not-allowed disabled:opacity-60 ${!buildPeriodLogSections().some((section) => section.selectedOptions.length > 0) ? 'cursor-not-allowed opacity-20' : ''}`}
           type="button"
         >
-          <X size={16} />
+          {isSaving ? 'Saving...' : isUpdateMode ? 'Update your day' : 'Log Your Day'}
         </button>
       </div>
-
-      <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto overscroll-y-contain">
-        {mergedSections.map((section) => (
-          <section key={section.title}>
-            <h2 className="text-lg font-semibold text-[#111111] mb-3 ml-3">{section.title}</h2>
-            <div className="rounded-3xl bg-[#FFD7D7] p-4 flex flex-wrap gap-3">
-              {section.options.map((option) =>
-                option.isEditing ? (
-                  <input
-                    key={option.id}
-                    autoFocus
-                    type="text"
-                    value={option.label}
-                    onChange={(event) =>
-                      updateCustomOptionLabel(section.title, option.id, event.target.value)
-                    }
-                    onBlur={() => finalizeCustomOption(section.title, option.id)}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter') {
-                        finalizeCustomOption(section.title, option.id);
-                      }
-                      if (event.key === 'Escape') {
-                        updateCustomOptionLabel(section.title, option.id, '');
-                        finalizeCustomOption(section.title, option.id);
-                      }
-                    }}
-                    className="rounded-full border border-[#33B1FF] bg-white px-4 py-1 text-sm font-semibold text-[#33B1FF] outline-none min-w-[120px]"
-                    placeholder="Type custom..."
-                  />
-                ) : (
-                  <Chip
-                    key={option.id}
-                    label={option.label}
-                    isSelected={selectedBySection[section.title]?.has(option.id) ?? false}
-                    onClick={() => toggleOption(section.title, option.id)}
-                  />
-                )
-              )}
-              <button
-                type="button"
-                onClick={() => addCustomOption(section.title)}
-                className="rounded-full border border-dashed border-[#33B1FF] bg-white px-4 py-1 text-sm font-semibold text-[#33B1FF] transition-colors hover:bg-[#EAF8FF] flex items-center gap-1"
-              >
-                <PlusCircle size={16} strokeWidth={2} />
-                Add
-              </button>
-            </div>
-          </section>
-        ))}
-      </div>
-      <button
-        onClick={handleSaveLog}
-        disabled={isSaving}
-        className={`mt-8 shrink-0 w-full bg-[#FF6961] text-white font-bold text-lg py-2 px-12 max-w-[22rem] rounded-full shadow-md mt-2 mb-4 disabled:opacity-60 disabled:cursor-not-allowed ${!buildPeriodLogSections().some((section) => section.selectedOptions.length > 0) ? 'opacity-20 cursor-not-allowed' : ''}`}
-        type="button"
-      >
-        {isSaving ? 'Saving...' : 'Log Your Day'}
-      </button>
     </div>
   );
 }

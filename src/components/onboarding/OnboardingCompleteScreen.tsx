@@ -58,7 +58,7 @@ export default function OnboardingCompleteScreen() {
         setPercentage(100);
         // Complete onboarding and navigate after animation finishes
         setTimeout(() => {
-          handleComplete();
+          // handleComplete();
         }, 500);
         return;
       }
@@ -78,7 +78,7 @@ export default function OnboardingCompleteScreen() {
             const segmentProgress = Math.min(segmentElapsed / segmentTime, 1);
             currentPercent = Math.round(
               prevStop.percent +
-                (nextStop.percent - prevStop.percent) * segmentProgress,
+              (nextStop.percent - prevStop.percent) * segmentProgress,
             );
           }
           break;

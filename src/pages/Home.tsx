@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import RateFeeling from '../components/home/RateFeeling';
 import DateCycle from '../components/home/DateCycle';
 import DayBrief from '../components/home/DayBrief';
@@ -5,9 +6,33 @@ import CycleGuides from '../components/home/CycleGuides';
 import Blogs from '../components/Blogs';
 import Notifications from '../components/Notifications';
 import { useNavigate } from 'react-router-dom';
+import { getLatestPeriodLogForLocalDay } from '../utils/periodLogs';
+import { onAuthStateChange } from '../utils/firebaseAuth';
 
 export default function Home() {
   const navigate = useNavigate();
+  const [hasLoggedToday, setHasLoggedToday] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const refresh = async () => {
+      const log = await getLatestPeriodLogForLocalDay();
+      if (!cancelled) {
+        setHasLoggedToday(log != null);
+      }
+    };
+
+    refresh();
+    const unsub = onAuthStateChange(() => {
+      void refresh();
+    });
+
+    return () => {
+      cancelled = true;
+      unsub();
+    };
+  }, []);
 
   return (
     <div className="flex-1 p-6 flex flex-col gap-4">
@@ -27,8 +52,14 @@ export default function Home() {
         </button>
         <button
           onClick={() => navigate('/log')}
-          className="flex justify-center items-center border border-2 border-[#33B1FF] text-[#33B1FF] bg-white rounded-full w-1/2 text-base  py-2 px-1 font-bold">
-          Log Your Day
+          className={
+            hasLoggedToday
+              ? 'flex justify-center items-center border-2 border-[#33B1FF] bg-[#33B1FF] text-white rounded-full w-1/2 text-base py-2 px-1 font-bold'
+              : 'flex justify-center items-center border border-2 border-[#33B1FF] text-[#33B1FF] bg-white rounded-full w-1/2 text-base py-2 px-1 font-bold'
+          }
+          type="button"
+        >
+          {hasLoggedToday ? 'Update your day' : 'Log Your Day'}
         </button>
       </div>
       <CycleGuides />
