@@ -128,7 +128,7 @@ export default function CycleDetailsPage() {
 
       <section className="flex flex-col gap-2">
         <ProfileLabeledField label="Average Cycle Length">
-          <div className="flex flex-row items-center gap-0 rounded-full border border-[#ff8d7b]/55 bg-white/35 py-1 pl-1 pr-1 shadow-sm">
+          <div className="flex flex-row items-center gap-0 rounded-full border border-[#FF6961] border-2 bg-white py-1 pl-1 pr-1 shadow-sm">
             <button
               type="button"
               onClick={() => bumpCycle(-1)}
@@ -161,7 +161,7 @@ export default function CycleDetailsPage() {
 
       <section className="flex flex-col gap-2">
         <ProfileLabeledField label="Average Period Length">
-          <div className="flex flex-row items-center gap-0 rounded-full border border-[#ff8d7b]/55 bg-white/35 py-1 pl-1 pr-1 shadow-sm">
+          <div className="flex flex-row items-center gap-0 rounded-full border border-[#FF6961] border-2 bg-white py-1 pl-1 pr-1 shadow-sm">
             <button
               type="button"
               disabled={local.periodUnsure}
@@ -218,7 +218,7 @@ export default function CycleDetailsPage() {
                 aria-label={`Flow level ${n}`}
               >
                 <Droplet
-                  className={`h-8 w-8 transition-colors ${
+                  className={`h-14 w-14 transition-colors ${
                     n <= local.flowIntensity
                       ? "fill-[#ff6961] text-[#ff6961]"
                       : "fill-transparent text-[#ff6961]/45"
@@ -312,7 +312,7 @@ export default function CycleDetailsPage() {
               <button
                 type="button"
                 onClick={() => setShowOther(true)}
-                className="w-full rounded-full border-2 border-dashed border-[#ff8d7b]/55 py-3.5 text-center text-[15px] font-semibold text-[#4a3d3f]/65"
+                className="w-full rounded-full border-2 border-dashed border-[#FF6961] bg-white py-3.5 text-center text-[15px] font-semibold text-[#4a3d3f]/65"
               >
                 + Add other conditions
               </button>

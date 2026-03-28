@@ -24,7 +24,7 @@ export default function Goal() {
   return (
     <div className="flex flex-col gap-3">
       <span className="text-lg font-bold text-[#1a1112]">My Goal</span>
-      <div className="-mx-1 flex flex-row gap-2 overflow-x-auto pb-1">
+      <div className="-mx-1 flex flex-row gap-2 overflow-x-auto pb-2">
         {GOALS.map(({ value, label }) => (
           <button
             key={value}

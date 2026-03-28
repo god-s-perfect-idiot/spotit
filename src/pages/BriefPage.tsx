@@ -24,7 +24,7 @@ export default function BriefPage() {
 
   return (
     <div className="min-h-full bg-[#FFF0ED] pb-10 font-sans text-[#111111]">
-      <header className="sticky top-0 z-10 flex items-center justify-center border-b border-black/[0.06] bg-[#FFF0ED]/60 px-5 py-4 backdrop-blur-sm">
+      <header className="sticky top-0 z-10 flex items-center justify-center border-b border-black/[0.06] bg-[#FFF0ED] px-5 py-4">
         <button
           type="button"
           onClick={() => navigate(-1)}

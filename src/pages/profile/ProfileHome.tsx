@@ -25,14 +25,12 @@ function SettingsToggleRow({
         role="switch"
         aria-checked={checked}
         onClick={() => onChange(!checked)}
-        className={`relative h-7 w-12 shrink-0 rounded-full transition-colors ${
-          checked ? "bg-[#ff6961]" : "bg-white/60 ring-2 ring-[#ff6961]/35"
-        }`}
+        className={`relative h-7 w-12 shrink-0 rounded-full transition-colors ${checked ? "bg-[#ff6961]" : "bg-white/60 ring-2 ring-[#ff6961]/35"
+          }`}
       >
         <span
-          className={`absolute top-0.5 left-0.5 h-6 w-6 rounded-full bg-white shadow transition-transform ${
-            checked ? "translate-x-5" : "translate-x-0"
-          }`}
+          className={`absolute top-0.5 left-0.5 h-6 w-6 rounded-full bg-white shadow transition-transform ${checked ? "translate-x-5" : "translate-x-0"
+            }`}
         />
       </button>
     </div>
@@ -108,7 +106,7 @@ export default function ProfileHome() {
 
       <section className="flex flex-col gap-2">
         <h2 className="text-lg font-bold text-[#1a1112]">Health Hub</h2>
-        <div className="bg-[#F9D1CD] flex flex-col rounded-3xl px-4 py-1">
+        <div className="bg-[#F9D1CD] flex flex-col rounded-3xl px-4 py-4">
           <HubLinkRow to="/profile/contraception" label="Contraception Hub" />
           <HubLinkRow to="/profile/appointments" label="Appointment Tracking" />
           <HubLinkRow to="/profile/cycle-details" label="Cycle Details" />
@@ -118,15 +116,11 @@ export default function ProfileHome() {
 
       <section className="flex flex-col gap-2">
         <h2 className="text-lg font-bold text-[#1a1112]">Settings</h2>
-        <div className="bg-[#F9D1CD] flex flex-col rounded-3xl px-4 py-2">
+        <div className="bg-[#F9D1CD] flex flex-col rounded-3xl px-4 py-4">
           <SettingsToggleRow label="Dark Mode" checked={darkOn} onChange={applyDark} />
-          <div className="mx-0 border-t border-white/45" />
           <SettingsLinkRow to="/profile/settings/hide-content" label="Hide Content" />
-          <div className="mx-0 border-t border-white/45" />
           <SettingsLinkRow to="/profile/settings/privacy" label="Privacy Settings" />
-          <div className="mx-0 border-t border-white/45" />
           <SettingsLinkRow to="/profile/settings/notifications" label="Notification Settings" />
-          <div className="mx-0 border-t border-white/45" />
           <SettingsLinkRow to="/profile/settings/help" label="Help & FAQs" />
         </div>
       </section>

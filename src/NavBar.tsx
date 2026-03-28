@@ -21,11 +21,10 @@ function NavbarItem({
     <button
       type="button"
       onClick={onClick}
-      className={`flex flex-col gap-1 items-center justify-center transition-all duration-300 ease-in-out ${
-        isActive
-          ? "text-white"
-          : "text-[#ffffff70] hover:text-white"
-      }`}
+      className={`flex flex-col gap-1 items-center justify-center origin-center transition-all duration-300 ease-in-out ${isActive
+          ? "text-white scale-[1.03]"
+          : "text-[#ffffff70] hover:text-white scale-100"
+        }`}
     >
       <div className="transition-all duration-300">
         {icon}

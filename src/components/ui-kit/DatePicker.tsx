@@ -1,5 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { ChevronDown, Calendar } from "lucide-react";
+
+function isoFromLocalYmd(y: number, monthIndex: number, day: number): string {
+  const mm = String(monthIndex + 1).padStart(2, "0");
+  const dd = String(day).padStart(2, "0");
+  return `${y}-${mm}-${dd}`;
+}
 
 interface DatePickerProps {
   value: Date;
@@ -8,6 +14,12 @@ interface DatePickerProps {
   className?: string;
   maxYear?: number; // Maximum year allowed (defaults to current year)
   minYear?: number; // Minimum year allowed (defaults to current year - 100)
+  /** ISO date strings (YYYY-MM-DD) to highlight as secondary marks on the grid */
+  markedIsoDates?: string[];
+  /** When false, only the month/year + grid is shown (e.g. under a separate field label) */
+  showTextSummary?: boolean;
+  /** Extra classes for the calendar panel (background, padding) */
+  calendarClassName?: string;
 }
 
 export default function DatePicker({
@@ -17,6 +29,9 @@ export default function DatePicker({
   className = "",
   maxYear,
   minYear,
+  markedIsoDates,
+  showTextSummary = true,
+  calendarClassName = "",
 }: DatePickerProps) {
   const currentYear = new Date().getFullYear();
   const defaultMaxYear = maxYear ?? currentYear;
@@ -91,24 +106,33 @@ export default function DatePicker({
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
   const emptyDays = Array.from({ length: firstDayOfMonth }, (_, i) => i);
 
+  const markedSet = useMemo(
+    () => new Set(markedIsoDates ?? []),
+    [markedIsoDates],
+  );
+
   return (
     <div className={className}>
       {/* Date Input Field */}
-      <div className="relative mb-4">
-        <input
-          type="text"
-          value={formatDate(value)}
-          readOnly
-          placeholder={placeholder}
-          className="w-full cursor-pointer rounded-full border-[2px] border-[#ff6961] bg-white px-4 py-3 font-medium text-gray-800 focus:outline-none"
-        />
-        <span className="absolute right-3 top-1/2 -translate-y-1/2 transform rounded-full bg-[#ff6961] p-2">
-          <Calendar size={20} className="text-white" />
-        </span>
-      </div>
+      {showTextSummary ? (
+        <div className="relative mb-4">
+          <input
+            type="text"
+            value={formatDate(value)}
+            readOnly
+            placeholder={placeholder}
+            className="w-full cursor-pointer rounded-full border-[2px] border-[#ff6961] bg-white px-4 py-3 font-medium text-gray-800 focus:outline-none"
+          />
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 transform rounded-full bg-[#ff6961] p-2">
+            <Calendar size={20} className="text-white" />
+          </span>
+        </div>
+      ) : null}
 
       {/* Date Picker */}
-      <div className="mb-6 rounded-2xl bg-[#F9D1CD] p-4">
+      <div
+        className={`rounded-2xl bg-[#F9D1CD] p-4 ${showTextSummary ? "mb-6" : ""} ${calendarClassName}`.trim()}
+      >
         {/* Month and Year Dropdowns */}
         <div className="flex gap-3 mb-4">
           <div className="flex h-full w-full flex-1 cursor-pointer appearance-none items-center justify-between rounded-full border-[2px] border-[#ff6961] bg-white px-4 py-2 font-medium text-gray-800 focus:outline-none">
@@ -167,19 +191,26 @@ export default function DatePicker({
           ))}
 
           {/* Day numbers */}
-          {days.map((day) => (
-            <button
-              key={day}
-              onClick={() => handleDaySelect(day)}
-              className={`flex h-10 w-10 items-center justify-center text-sm font-medium transition-colors ${
-                day === selectedDay
-                  ? "rounded-2xl border-[2px] border-[#ff6961] bg-white text-black"
-                  : "text-gray-800 hover:bg-white/50"
-              }`}
-            >
-              {day}
-            </button>
-          ))}
+          {days.map((day) => {
+            const iso = isoFromLocalYmd(selectedYear, selectedMonth, day);
+            const isMarked = markedSet.has(iso) && day !== selectedDay;
+            return (
+              <button
+                key={day}
+                type="button"
+                onClick={() => handleDaySelect(day)}
+                className={`flex h-10 w-10 items-center justify-center text-sm font-medium transition-colors ${
+                  day === selectedDay
+                    ? "rounded-2xl border-[2px] border-[#ff6961] bg-white text-black"
+                    : isMarked
+                      ? "rounded-2xl bg-[#ff6961]/25 text-gray-900 hover:bg-[#ff6961]/35"
+                      : "text-gray-800 hover:bg-white/50"
+                }`}
+              >
+                {day}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

@@ -395,7 +395,7 @@ export default function Log() {
   return (
     <div className="flex min-h-0 flex-1 flex-col bg-[#FFE9E5]">
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain">
-        <header className="sticky top-0 z-10 flex w-full min-w-0 shrink-0 items-center justify-between border-b border-black/[0.06] bg-[#FFF0ED]/60 px-6 py-4 backdrop-blur-sm">
+        <header className="sticky top-0 z-10 flex w-full min-w-0 shrink-0 items-center justify-between border-b border-black/[0.06] bg-[#FFF0ED] px-6 py-4">
           <h1 className="text-2xl font-semibold leading-[1] text-[#111111]">
             {isUpdateMode ? 'Update your day' : 'Log Your Day'}
           </h1>

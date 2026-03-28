@@ -33,7 +33,7 @@ export function Loader({
       </span>
       <span
         className={[
-          compact ? "text-sm font-semibold" : "text-base font-medium",
+          compact ? "text-sm font-semibold" : "text-base font-bold",
           compact ? "" : "text-gray-700",
           labelClassName,
         ]
@@ -49,7 +49,7 @@ export function Loader({
     return (
       <div
         className={[
-          "flex flex-col items-center justify-center gap-3 rounded-2xl border border-[#FF8D7B]/30 bg-white px-8 py-6 shadow-md",
+          "flex flex-col items-center justify-center gap-3 px-8 py-6",
           className,
         ]
           .filter(Boolean)
