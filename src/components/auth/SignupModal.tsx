@@ -3,6 +3,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { signupWithEmail, loginWithGoogle, loginWithApple, clearError } from '../../store/authSlice';
 import Modal from '../Modal';
+import { Loader } from '../ui-kit/Loader';
 
 interface SignupModalProps {
   onLogin: () => void;
@@ -103,7 +104,7 @@ export default function SignupModal({ onLogin, onSuccess }: SignupModalProps) {
             name="email"
             placeholder="Email Id"
             required
-            className="w-full px-4 py-3 rounded-full bg-white border border-[#FF8D7B] focus:outline-none"
+            className="w-full rounded-full border border-[#FF8D7B] bg-white px-4 py-3 focus:outline-none"
             value={formData.email}
             onChange={handleInputChange}
           />
@@ -115,7 +116,7 @@ export default function SignupModal({ onLogin, onSuccess }: SignupModalProps) {
             name="password"
             placeholder="Password"
             required
-            className="w-full px-4 py-3 rounded-full bg-white border border-[#FF8D7B] focus:outline-none pr-12"
+            className="w-full rounded-full border border-[#FF8D7B] bg-white px-4 py-3 pr-12 focus:outline-none"
             value={formData.password}
             onChange={handleInputChange}
           />
@@ -134,7 +135,7 @@ export default function SignupModal({ onLogin, onSuccess }: SignupModalProps) {
             name="confirmPassword"
             placeholder="Confirm Password"
             required
-            className="w-full px-4 py-3 rounded-full bg-white border border-[#FF8D7B] focus:outline-none pr-12"
+            className="w-full rounded-full border border-[#FF8D7B] bg-white px-4 py-3 pr-12 focus:outline-none"
             value={formData.confirmPassword}
             onChange={handleInputChange}
           />
@@ -154,9 +155,13 @@ export default function SignupModal({ onLogin, onSuccess }: SignupModalProps) {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full  bg-[#FF6961] hover:bg-[#FF6961] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2 px-6 rounded-full shadow-md"
+          className="flex w-full items-center justify-center rounded-full bg-[#FF6961] px-6 py-2 font-bold text-white shadow-md hover:bg-[#FF6961] disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isLoading ? 'Creating Account...' : 'Sign Up'}
+          {isLoading ? (
+            <Loader withCard={false} size="compact" label="Creating account" labelClassName="text-white" />
+          ) : (
+            'Sign Up'
+          )}
         </button>
       </form>
 
@@ -167,7 +172,7 @@ export default function SignupModal({ onLogin, onSuccess }: SignupModalProps) {
             type="button"
             onClick={handleGoogleSignIn}
             disabled={isLoading}
-            className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition-shadow hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
           >
             <span className="text-blue-600 font-bold">G</span>
           </button>
@@ -175,7 +180,7 @@ export default function SignupModal({ onLogin, onSuccess }: SignupModalProps) {
             type="button"
             onClick={handleAppleSignIn}
             disabled={isLoading}
-            className="w-10 h-10 bg-black rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-black shadow-md transition-shadow hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
           >
             <span className="text-white text-sm">🍎</span>
           </button>

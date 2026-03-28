@@ -7,7 +7,7 @@ export default function HeroStep({ onNext }: HeroStepProps) {
     <div className="flex flex-col items-center justify-end min-h-screen text-center pb-24">
 
       {/* Hero Image if available */}
-      <div className="mb-12 mt-4 bg-[#f6beb9] rounded-3xl p-4 shadow-md drop-shadow-md">
+      <div className="mb-12 mt-4 rounded-3xl bg-[#f6beb9] p-4 shadow-md drop-shadow-md">
         <img
           src="/onboarding-hero.png"
           alt="Welcome to Spot It"
@@ -33,7 +33,7 @@ export default function HeroStep({ onNext }: HeroStepProps) {
       <div className="w-full">
         <button
           onClick={onNext}
-          className="w-full bg-[#ff6961] text-white font-bold text-lg py-2 px-12 max-w-[22rem] rounded-full shadow-md mt-2 mb-4"
+          className="mt-2 mb-4 w-full max-w-[22rem] rounded-full bg-[#ff6961] px-12 py-2 text-lg font-bold text-white shadow-md"
         >
           I understand
         </button>

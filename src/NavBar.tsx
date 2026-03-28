@@ -19,10 +19,11 @@ function NavbarItem({
 }) {
   return (
     <button
+      type="button"
       onClick={onClick}
       className={`flex flex-col gap-1 items-center justify-center transition-all duration-300 ease-in-out ${
-        isActive 
-          ? "text-white" 
+        isActive
+          ? "text-white"
           : "text-[#ffffff70] hover:text-white"
       }`}
     >
@@ -45,6 +46,9 @@ export default function Navbar() {
   };
 
   const isActive = (path: string) => {
+    if (path === "/profile") {
+      return location.pathname === "/profile" || location.pathname.startsWith("/profile/");
+    }
     return location.pathname === path;
   };
 

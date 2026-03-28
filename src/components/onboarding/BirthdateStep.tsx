@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import { updateUser } from "../../store/authSlice";
 import DatePicker from "../ui-kit/DatePicker";
+import { Loader } from "../ui-kit/Loader";
 
 interface BirthdateStepProps {
   onNext: () => void;
@@ -52,9 +53,13 @@ export default function BirthdateStep({ onNext }: BirthdateStepProps) {
         <button
           onClick={handleNext}
           disabled={isSaving}
-          className="w-full bg-[#ff6961] text-white font-bold text-lg py-2 px-12 max-w-[22rem] rounded-full shadow-md mt-2 mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="mt-2 mb-4 flex w-full max-w-[22rem] items-center justify-center rounded-full bg-[#ff6961] px-12 py-2 text-lg font-bold text-white shadow-md disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isSaving ? "Saving..." : "Next"}
+          {isSaving ? (
+            <Loader withCard={false} size="compact" label="Saving" labelClassName="text-white" />
+          ) : (
+            "Next"
+          )}
         </button>
       </div>
     </div>

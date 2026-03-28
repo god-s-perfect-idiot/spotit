@@ -1,50 +1,45 @@
-import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { updateUser } from "../../store/authSlice";
+
+type GoalValue = "track-cycle" | "get-pregnant" | "track-pregnancy";
+
+const GOALS: { value: GoalValue; label: string }[] = [
+  { value: "track-cycle", label: "Track Cycle" },
+  { value: "get-pregnant", label: "Get Pregnant" },
+  { value: "track-pregnancy", label: "Track Pregnancy" },
+];
 
 export default function Goal() {
-    const [goal, setGoal] = useState<string>("Track Cycle");
+  const dispatch = useAppDispatch();
+  const stored = useAppSelector((s) => s.auth.user?.goal);
+  const active: GoalValue =
+    stored === "get-pregnant" || stored === "track-pregnancy" ? stored : "track-cycle";
 
-    const handleGoal = (goal: string) => {
-        setGoal(goal);
-    }   
+  const handleGoal = (goal: GoalValue) => {
+    void dispatch(updateUser({ goal })).unwrap().catch(() => {
+      /* optional toast */
+    });
+  };
 
-    return (
-        <div className="flex flex-col gap-4">
-            <span className="text-lg font-semibold">My Goal</span>
-            <div className="flex flex-row gap-1 w-full justify-between">
-                <button 
-                    type="button" 
-                    className={`text-xs w-1/3 rounded-full px-1 py-2 font-semibold transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95 ${
-                        goal === "Track Cycle" 
-                            ? "bg-[#FF6961] text-white shadow-lg" 
-                            : "bg-white border-2 border-[#FF6961] text-black hover:bg-[#FF6961] hover:text-white hover:border-[#FF6961]"
-                    }`} 
-                    onClick={() => handleGoal("Track Cycle")}
-                >
-                    Track Cycle
-                </button>
-                <button 
-                    type="button" 
-                    className={`text-xs w-1/3 rounded-full px-1 py-2 font-semibold transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95 ${
-                        goal === "Get Pregnant" 
-                            ? "bg-[#FF6961] text-white shadow-lg" 
-                            : "bg-white border-2 border-[#FF6961] text-black hover:bg-[#FF6961] hover:text-white hover:border-[#FF6961]"
-                    }`} 
-                    onClick={() => handleGoal("Get Pregnant")}
-                >
-                    Get Pregnant
-                </button>
-                <button 
-                    type="button" 
-                    className={`text-xs w-1/3 rounded-full px-1 py-2 font-semibold transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95 ${
-                        goal === "Track Pregnancy" 
-                            ? "bg-[#FF6961] text-white shadow-lg" 
-                            : "bg-white border-2 border-[#FF6961] text-black hover:bg-[#FF6961] hover:text-white hover:border-[#FF6961]"
-                    }`} 
-                    onClick={() => handleGoal("Track Pregnancy")}
-                >
-                    Track Pregnancy
-                </button>
-            </div>
-        </div>
-    )
+  return (
+    <div className="flex flex-col gap-3">
+      <span className="text-lg font-bold text-[#1a1112]">My Goal</span>
+      <div className="-mx-1 flex flex-row gap-2 overflow-x-auto pb-1">
+        {GOALS.map(({ value, label }) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => handleGoal(value)}
+            className={`shrink-0 transform rounded-full px-4 py-2.5 text-xs font-semibold transition-all duration-300 ease-in-out hover:scale-[1.02] active:scale-95 ${
+              active === value
+                ? "bg-[#FF6961] text-white shadow-lg"
+                : "border-2 border-[#FF6961] bg-white text-black hover:border-[#FF6961] hover:bg-[#FF6961] hover:text-white"
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 }

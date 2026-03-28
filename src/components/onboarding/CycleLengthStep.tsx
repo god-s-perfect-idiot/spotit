@@ -3,6 +3,7 @@ import { useAppDispatch } from "../../store/hooks";
 import { updateUser } from "../../store/authSlice";
 import { Minus, Plus } from "lucide-react";
 import CycleLengthNotSureModal from "./CycleLengthNotSureModal";
+import { Loader } from "../ui-kit/Loader";
 
 interface CycleLengthStepProps {
   onNext: () => void;
@@ -71,11 +72,11 @@ export default function CycleLengthStep({ onNext }: CycleLengthStepProps) {
 
           {/* Cycle Length Selector */}
           <div className="mb-4">
-            <div className="relative flex items-center justify-center bg-white rounded-full border-[2px] border-[#ff6961] px-2 py-2">
+            <div className="relative flex items-center justify-center rounded-full border-[2px] border-[#ff6961] bg-white px-2 py-2">
               <button
                 onClick={handleDecrement}
                 disabled={cycleLength <= 1}
-                className="p-2 bg-[#ff6961] rounded-full text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="rounded-full bg-[#ff6961] p-2 text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                 aria-label="Decrease cycle length"
               >
                 <Minus size={20} />
@@ -89,7 +90,7 @@ export default function CycleLengthStep({ onNext }: CycleLengthStepProps) {
 
               <button
                 onClick={handleIncrement}
-                className="p-2 bg-[#ff6961] rounded-full text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="rounded-full bg-[#ff6961] p-2 text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                 aria-label="Increase cycle length"
               >
                 <Plus size={20} />
@@ -101,8 +102,8 @@ export default function CycleLengthStep({ onNext }: CycleLengthStepProps) {
           <div className="mb-6">
             <button
               onClick={handleNotSure}
-              className={`w-full bg-white text-lg font-medium rounded-full border-[2px] font-medium border-[#ff6961] px-4 py-3 text-gray-800 transition-colors ${
-                isNotSure ? "!bg-[#ff6961] text-white" : ""
+              className={`w-full rounded-full border-[2px] border-[#ff6961] px-4 py-3 text-lg font-medium text-gray-800 transition-colors ${
+                isNotSure ? "!bg-[#ff6961] text-white" : "bg-white"
               }`}
             >
               I am not sure
@@ -115,9 +116,13 @@ export default function CycleLengthStep({ onNext }: CycleLengthStepProps) {
           <button
             onClick={handleNext}
             disabled={isSaving}
-            className="w-full bg-[#ff6961] text-white font-bold text-lg py-2 px-12 max-w-[22rem] rounded-full shadow-md mt-2 mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-2 mb-4 flex w-full max-w-[22rem] items-center justify-center rounded-full bg-[#ff6961] px-12 py-2 text-lg font-bold text-white shadow-md disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {isSaving ? "Saving..." : "Next"}
+            {isSaving ? (
+              <Loader withCard={false} size="compact" label="Saving" labelClassName="text-white" />
+            ) : (
+              "Next"
+            )}
           </button>
         </div>
       </div>

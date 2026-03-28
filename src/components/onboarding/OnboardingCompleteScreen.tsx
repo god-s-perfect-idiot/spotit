@@ -173,10 +173,10 @@ export default function OnboardingCompleteScreen() {
         <h3 className="text-xl font-bold text-black mb-3 text-center">
           Did you know?
         </h3>
-        <div className="relative min-h-[3rem] flex items-center justify-center">
+        <div className="relative flex min-h-[3rem] items-center justify-center rounded-2xl bg-[#F9D1CD] px-4 py-3">
           <p
             key={factKey}
-            className="text-black text-base text-center animate-fade-in"
+            className="animate-fade-in text-center text-base text-black"
           >
             {FACTS[currentFactIndex]}
           </p>

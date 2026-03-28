@@ -151,7 +151,7 @@ export default function Onboarding() {
           {/* Back Button */}
           <button
             onClick={handleBack}
-            className="p-2 text-white bg-[#ff6961] rounded-full transition-colors"
+            className="rounded-full bg-[#ff6961] p-2 text-white transition-colors"
             aria-label="Go back"
           >
             <ArrowLeft size={24} />
@@ -165,10 +165,10 @@ export default function Onboarding() {
                   key={index}
                   className={`h-2 rounded-full transition-all ${
                     index === currentStep
-                      ? 'bg-[#ff6961] w-8'
+                      ? 'w-8 bg-[#ff6961]'
                       : index < currentStep
-                      ? 'bg-[#ff6961] w-2'
-                      : 'bg-white w-2'
+                        ? 'w-2 bg-[#ff6961]'
+                        : 'w-2 bg-white'
                   }`}
                 /> 
               ))}

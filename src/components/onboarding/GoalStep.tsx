@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import { updateUser } from "../../store/authSlice";
+import { Loader } from "../ui-kit/Loader";
 
 interface GoalStepProps {
   onNext: () => void;
@@ -55,10 +56,10 @@ export default function GoalStep({ onNext }: GoalStepProps) {
             <button
               key={option.value}
               onClick={() => handleGoalSelect(option.value)}
-              className={`w-full bg-white rounded-full border-[2px] border-[#ff6961] px-4 py-3 text-black font-medium transition-colors text-center ${
+              className={`w-full rounded-full border-[2px] border-[#ff6961] px-4 py-3 text-center font-medium transition-colors ${
                 selectedGoal === option.value
                   ? "!bg-[#ff6961] text-white"
-                  : ""
+                  : "bg-white text-black"
               }`}
             >
               {option.label}
@@ -72,9 +73,13 @@ export default function GoalStep({ onNext }: GoalStepProps) {
         <button
           onClick={handleNext}
           disabled={isSaving}
-          className="w-full bg-[#ff6961] text-white font-bold text-lg py-2 px-12 max-w-[22rem] rounded-full shadow-md mt-2 mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="mt-2 mb-4 flex w-full max-w-[22rem] items-center justify-center rounded-full bg-[#ff6961] px-12 py-2 text-lg font-bold text-white shadow-md disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isSaving ? "Saving..." : "Next"}
+          {isSaving ? (
+            <Loader withCard={false} size="compact" label="Saving" labelClassName="text-white" />
+          ) : (
+            "Next"
+          )}
         </button>
       </div>
     </div>

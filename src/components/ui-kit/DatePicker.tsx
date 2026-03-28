@@ -100,18 +100,18 @@ export default function DatePicker({
           value={formatDate(value)}
           readOnly
           placeholder={placeholder}
-          className="w-full px-4 py-3 font-medium rounded-full border-[2px] border-[#ff6961] bg-white text-gray-800 cursor-pointer focus:outline-none"
+          className="w-full cursor-pointer rounded-full border-[2px] border-[#ff6961] bg-white px-4 py-3 font-medium text-gray-800 focus:outline-none"
         />
-        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-[#ff6961] rounded-full">
+        <span className="absolute right-3 top-1/2 -translate-y-1/2 transform rounded-full bg-[#ff6961] p-2">
           <Calendar size={20} className="text-white" />
         </span>
       </div>
 
       {/* Date Picker */}
-      <div className="bg-[#F9D1CD] rounded-2xl p-4 mb-6">
+      <div className="mb-6 rounded-2xl bg-[#F9D1CD] p-4">
         {/* Month and Year Dropdowns */}
         <div className="flex gap-3 mb-4">
-          <div className="flex-1 flex w-full w-full px-4 py-2 font-medium rounded-full border-[2px] border-[#ff6961] bg-white text-gray-800 appearance-none cursor-pointer focus:outline-none items-center h-full justify-between">
+          <div className="flex h-full w-full flex-1 cursor-pointer appearance-none items-center justify-between rounded-full border-[2px] border-[#ff6961] bg-white px-4 py-2 font-medium text-gray-800 focus:outline-none">
             <select
               value={selectedMonth}
               onChange={(e) => handleMonthChange(Number(e.target.value))}
@@ -129,7 +129,7 @@ export default function DatePicker({
               strokeWidth={2}
             />
           </div>
-          <div className="flex flex-1 w-full px-4 py-2 font-medium rounded-full border-[2px] border-[#ff6961] bg-white text-gray-800 appearance-none cursor-pointer focus:outline-none items-center h-full justify-between">
+          <div className="flex h-full w-full flex-1 cursor-pointer appearance-none items-center justify-between rounded-full border-[2px] border-[#ff6961] bg-white px-4 py-2 font-medium text-gray-800 focus:outline-none">
             <select
               value={selectedYear}
               onChange={(e) => handleYearChange(Number(e.target.value))}
@@ -171,9 +171,9 @@ export default function DatePicker({
             <button
               key={day}
               onClick={() => handleDaySelect(day)}
-              className={`h-10 w-10 flex items-center justify-center text-sm font-medium transition-colors ${
+              className={`flex h-10 w-10 items-center justify-center text-sm font-medium transition-colors ${
                 day === selectedDay
-                  ? "border-[2px] border-[#ff6961] bg-white text-black rounded-2xl"
+                  ? "rounded-2xl border-[2px] border-[#ff6961] bg-white text-black"
                   : "text-gray-800 hover:bg-white/50"
               }`}
             >

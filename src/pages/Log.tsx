@@ -3,13 +3,14 @@ import { PlusCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import {
   createPeriodLog,
-  getLatestPeriodLogForLocalDay,
   updatePeriodLog,
   type PeriodLogSectionEntry,
 } from '../utils/periodLogs';
 import { useToast } from '../components/ui-kit/ToastProvider';
+import { Loader } from '../components/ui-kit/Loader';
 import { useNavbarVisibility } from '../context/NavbarVisibilityContext';
-import { onAuthStateChange } from '../utils/firebaseAuth';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setTodayPeriodLog } from '../store/appDataSlice';
 
 type LogSection = {
   title: string;
@@ -204,8 +205,8 @@ function Chip({
     <button
       onClick={onClick}
       className={`rounded-full border px-4 py-1 text-sm font-semibold transition-colors ${isSelected
-        ? 'bg-[#33B1FF] text-white border-[#33B1FF]'
-        : 'bg-white text-[#33B1FF] border-[#33B1FF]'
+        ? 'border-[#33B1FF] bg-[#33B1FF] text-white'
+        : 'border-[#33B1FF] bg-white text-[#33B1FF]'
         }`}
       type="button"
     >
@@ -216,6 +217,8 @@ function Chip({
 
 export default function Log() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const todayPeriodLog = useAppSelector((s) => s.appData.todayPeriodLog);
   const { showToast } = useToast();
   const { hideNavbar, showNavbar } = useNavbarVisibility();
   const [selectedBySection, setSelectedBySection] = useState<Record<string, Set<string>>>({});
@@ -224,7 +227,6 @@ export default function Log() {
   );
   const [isSaving, setIsSaving] = useState(false);
   const [editingTodayLogId, setEditingTodayLogId] = useState<string | null>(null);
-  const [prefillReady, setPrefillReady] = useState(false);
 
   useEffect(() => {
     hideNavbar();
@@ -235,34 +237,18 @@ export default function Log() {
   }, [hideNavbar, showNavbar]);
 
   useEffect(() => {
-    let cancelled = false;
-
-    const unsub = onAuthStateChange(() => {
-      void (async () => {
-        const existing = await getLatestPeriodLogForLocalDay();
-        if (cancelled) {
-          return;
-        }
-        if (existing) {
-          const { selectedBySection: sel, customOptionsBySection: customs } =
-            buildPrefillFromSavedSections(existing.sections);
-          setSelectedBySection(sel);
-          setCustomOptionsBySection(customs);
-          setEditingTodayLogId(existing.id);
-        } else {
-          setSelectedBySection({});
-          setCustomOptionsBySection({});
-          setEditingTodayLogId(null);
-        }
-        setPrefillReady(true);
-      })();
-    });
-
-    return () => {
-      cancelled = true;
-      unsub();
-    };
-  }, []);
+    if (todayPeriodLog) {
+      const { selectedBySection: sel, customOptionsBySection: customs } =
+        buildPrefillFromSavedSections(todayPeriodLog.sections);
+      setSelectedBySection(sel);
+      setCustomOptionsBySection(customs);
+      setEditingTodayLogId(todayPeriodLog.id);
+    } else {
+      setSelectedBySection({});
+      setCustomOptionsBySection({});
+      setEditingTodayLogId(null);
+    }
+  }, [todayPeriodLog]);
 
   const toggleOption = (sectionTitle: string, optionId: string) => {
     setSelectedBySection((prev) => {
@@ -388,11 +374,11 @@ export default function Log() {
       setIsSaving(true);
       if (editingTodayLogId) {
         await updatePeriodLog(editingTodayLogId, { sections });
+        dispatch(setTodayPeriodLog({ id: editingTodayLogId, sections }));
         showToast('Day updated queen, slay!.', 'success');
       } else {
-        await createPeriodLog({
-          sections,
-        });
+        const id = await createPeriodLog({ sections });
+        dispatch(setTodayPeriodLog({ id, sections }));
         showToast('Day logged queen, slay!.', 'success');
       }
       navigate('/home');
@@ -405,14 +391,6 @@ export default function Log() {
   };
 
   const isUpdateMode = Boolean(editingTodayLogId);
-
-  if (!prefillReady) {
-    return (
-      <div className="flex min-h-0 flex-1 flex-col items-center justify-center bg-[#FFE9E5] px-6 py-8">
-        <p className="text-base font-medium text-[#111111]">Loading…</p>
-      </div>
-    );
-  }
 
   return (
     <div className="flex min-h-0 flex-1 flex-col bg-[#FFE9E5]">
@@ -435,7 +413,7 @@ export default function Log() {
           {mergedSections.map((section) => (
             <section key={section.title}>
               <h2 className="text-lg font-semibold text-[#111111] mb-3 ml-3">{section.title}</h2>
-              <div className="rounded-3xl bg-[#FFD7D7] p-4 flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3 rounded-3xl bg-[#FFD7D7] p-4">
                 {section.options.map((option) =>
                   option.isEditing ? (
                     <input
@@ -456,7 +434,7 @@ export default function Log() {
                           finalizeCustomOption(section.title, option.id);
                         }
                       }}
-                      className="rounded-full border border-[#33B1FF] bg-white px-4 py-1 text-sm font-semibold text-[#33B1FF] outline-none min-w-[120px]"
+                      className="min-w-[120px] rounded-full border border-[#33B1FF] bg-white px-4 py-1 text-sm font-semibold text-[#33B1FF] outline-none"
                       placeholder="Type custom..."
                     />
                   ) : (
@@ -471,7 +449,7 @@ export default function Log() {
                 <button
                   type="button"
                   onClick={() => addCustomOption(section.title)}
-                  className="rounded-full border border-dashed border-[#33B1FF] bg-white px-4 py-1 text-sm font-semibold text-[#33B1FF] transition-colors hover:bg-[#EAF8FF] flex items-center gap-1"
+                  className="flex items-center gap-1 rounded-full border border-dashed border-[#33B1FF] bg-white px-4 py-1 text-sm font-semibold text-[#33B1FF] transition-colors hover:bg-[#EAF8FF]"
                 >
                   <PlusCircle size={16} strokeWidth={2} />
                   Add
@@ -485,10 +463,16 @@ export default function Log() {
         <button
           onClick={handleSaveLog}
           disabled={isSaving}
-          className={`w-full max-w-[22rem] rounded-full bg-[#FF6961] px-12 py-2 text-lg font-bold text-white shadow-md disabled:cursor-not-allowed disabled:opacity-60 ${!buildPeriodLogSections().some((section) => section.selectedOptions.length > 0) ? 'cursor-not-allowed opacity-20' : ''}`}
+          className={`flex w-full max-w-[22rem] items-center justify-center rounded-full bg-[#FF6961] px-12 py-2 text-lg font-bold text-white shadow-md disabled:cursor-not-allowed disabled:opacity-60 ${!buildPeriodLogSections().some((section) => section.selectedOptions.length > 0) ? 'cursor-not-allowed opacity-20' : ''}`}
           type="button"
         >
-          {isSaving ? 'Saving...' : isUpdateMode ? 'Update your day' : 'Log Your Day'}
+          {isSaving ? (
+            <Loader withCard={false} size="compact" label="Saving" labelClassName="text-white" />
+          ) : isUpdateMode ? (
+            'Update your day'
+          ) : (
+            'Log Your Day'
+          )}
         </button>
       </div>
     </div>

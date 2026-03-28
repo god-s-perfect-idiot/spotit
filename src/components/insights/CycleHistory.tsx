@@ -13,17 +13,17 @@ function DotIndicator({
     <div className={`flex flex-row gap-2 ${className}`}>
       <div className="flex flex-row gap-2">
         {Array.from({ length: red }).map((_, index) => (
-          <div key={index} className="w-3 h-3 bg-red-500 rounded-full"></div>
+          <div key={index} className="h-3 w-3 rounded-full bg-red-500" />
         ))}
       </div>
       <div className="flex flex-row gap-2">
         {Array.from({ length: white }).map((_, index) => (
-          <div key={index} className="w-3 h-3 bg-white rounded-full"></div>
+          <div key={index} className="h-3 w-3 rounded-full bg-white" />
         ))}
       </div>
       <div className="flex flex-row gap-2">
         {Array.from({ length: yellow }).map((_, index) => (
-          <div key={index} className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+          <div key={index} className="h-3 w-3 rounded-full bg-yellow-500" />
         ))}
       </div>
     </div>
@@ -39,7 +39,7 @@ export default function CycleHistory() {
           See All
         </button>
       </div>
-      <div className="flex flex-col gap-4 bg-[#F9D1CD] rounded-2xl p-4 w-full h-full">
+      <div className="flex h-full w-full flex-col gap-4 rounded-2xl bg-[#F9D1CD] p-4">
         <div className="flex flex-col gap-1">
           <span className="font-semibold">Current Cycle : 13 days</span>
           <span className="text-sm text-gray-700">Started Jan 17</span>

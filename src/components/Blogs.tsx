@@ -89,8 +89,8 @@ export default function Blogs({
             )
           )
           .map((article) => (
-            <div className="flex flex-col gap-4 bg-[#F9D1CD] rounded-2xl p-4 w-full min-w-[10rem] h-full justify-center items-center">
-              <div className="w-[5rem] h-[5rem] bg-white rounded-2xl" />
+            <div className="flex h-full min-w-[10rem] w-full flex-col items-center justify-center gap-4 rounded-2xl bg-[#F9D1CD] p-4">
+              <div className="h-[5rem] w-[5rem] rounded-2xl bg-white" />
               <span className="text-base">{article.title}</span>
             </div>
           ))}
@@ -124,8 +124,8 @@ export function FeaturedBlogs() {
       </div>
       <div className="flex flex-col gap-4">
         {fetchedBlogs.map((blog) => (
-          <div className="flex flex-row gap-4 justify-between items-center bg-[#F9D1CD] rounded-[2rem] p-4 w-full">
-            <span className="min-w-[5rem] w-[5rem] h-[5rem] bg-white rounded-2xl flex"></span>
+          <div className="flex w-full flex-row items-center justify-between gap-4 rounded-[2rem] bg-[#F9D1CD] p-4">
+            <span className="flex h-[5rem] min-w-[5rem] w-[5rem] rounded-2xl bg-white" />
             <div className="flex flex-col gap-2 w-full h-full">
               <span className="text-base font-semibold line-clamp-1">{blog.title}</span>
               <span className="text-xs text-gray-700">{blog.description}</span>
@@ -160,8 +160,8 @@ export function CustomisedBlogs() {
       </div>
       <div className="flex flex-col gap-4">
         {fetchedBlogs.map((blog) => (
-          <div className="flex flex-row gap-4 justify-between items-center bg-[#F9D1CD] rounded-[2rem] p-4 w-full">
-            <span className="min-w-[5rem] w-[5rem] h-[5rem] bg-white rounded-2xl flex"></span>
+          <div className="flex w-full flex-row items-center justify-between gap-4 rounded-[2rem] bg-[#F9D1CD] p-4">
+            <span className="flex h-[5rem] min-w-[5rem] w-[5rem] rounded-2xl bg-white" />
             <div className="flex flex-col gap-2 w-full h-full">
               <span className="text-base font-semibold line-clamp-1">{blog.title}</span>
               <span className="text-xs text-gray-700">{blog.description}</span>
@@ -214,8 +214,8 @@ export function BlogCategories() {
         </div>
         <div className="flex flex-row gap-4 overflow-x-auto pr-2 pb-2 scrollbar-hide">
             {categories.map((category) => (
-                <div className="flex flex-col gap-1 justify-between items-center bg-[#F9D1CD] rounded-2xl  p-4 w-full">
-                    <span className="min-w-[5rem] w-[5rem] h-[5rem] bg-white rounded-2xl flex"></span>
+                <div className="flex w-full flex-col items-center justify-between gap-1 rounded-2xl bg-[#F9D1CD] p-4">
+                    <span className="flex h-[5rem] min-w-[5rem] w-[5rem] rounded-2xl bg-white" />
                     <span className="text-sm font-medium text-center">{category.title}</span>
                 </div>
             ))}

@@ -4,7 +4,7 @@ export default function Cycles() {
     return (
         <div className="flex flex-col gap-4">
             <span className="font-bold">My Cycles</span>
-            <div className="flex flex-col gap-4 bg-[#F9D1CD] rounded-2xl p-4 w-full h-full">
+            <div className="flex h-full w-full flex-col gap-4 rounded-2xl bg-[#F9D1CD] p-4">
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-row justify-between">
                         <span className="text-sm">Previous Cycle Length</span>

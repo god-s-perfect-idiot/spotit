@@ -12,10 +12,18 @@ import Onboarding from './pages/Onboarding'
 import Home from './pages/Home'
 import Insights from './pages/Insights'
 import Read from './pages/Read'
-import Profile from './pages/Profile'
+import ProfileLayout from './pages/profile/ProfileLayout'
+import ProfileHome from './pages/profile/ProfileHome'
+import PersonalDetailsPage from './pages/profile/PersonalDetailsPage'
+import ContraceptionHubPage from './pages/profile/ContraceptionHubPage'
+import AppointmentTrackingPage from './pages/profile/AppointmentTrackingPage'
+import CycleDetailsPage from './pages/profile/CycleDetailsPage'
+import HealthReportPage from './pages/profile/HealthReportPage'
+import ProfileSettingsSubPage from './pages/profile/ProfileSettingsSubPage'
 import Log from './pages/Log'
 import BriefPage from './pages/BriefPage'
 import { ToastProvider } from './components/ui-kit/ToastProvider'
+import { Loader } from './components/ui-kit/Loader'
 import { NavbarVisibilityProvider } from './context/NavbarVisibilityContext'
 
 // Auth state observer component
@@ -44,8 +52,8 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   // After that, use persisted state immediately and check auth in background
   if (isLoading && !user && !isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+      <div className="flex min-h-screen items-center justify-center px-4">
+        <Loader />
       </div>
     );
   }
@@ -69,8 +77,8 @@ function OnboardingRoute() {
   // Only show loading on initial app load when we have no persisted state
   if (isLoading && !user && !isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+      <div className="flex min-h-screen items-center justify-center px-4">
+        <Loader />
       </div>
     );
   }
@@ -92,8 +100,8 @@ function RootRoute() {
 
   if (isLoading && !user && !isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+      <div className="flex min-h-screen items-center justify-center px-4">
+        <Loader />
       </div>
     );
   }
@@ -114,8 +122,8 @@ function LoginRoute() {
 
   if (isLoading && !user && !isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+      <div className="flex min-h-screen items-center justify-center px-4">
+        <Loader />
       </div>
     );
   }
@@ -150,7 +158,15 @@ function AppContent() {
             <Route path="/brief-page" element={<ProtectedRoute><BriefPage /></ProtectedRoute>} />
             <Route path="/insights" element={<ProtectedRoute><Insights /></ProtectedRoute>} />
             <Route path="/read" element={<ProtectedRoute><Read /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><ProfileLayout /></ProtectedRoute>}>
+              <Route index element={<ProfileHome />} />
+              <Route path="personal-details" element={<PersonalDetailsPage />} />
+              <Route path="contraception" element={<ContraceptionHubPage />} />
+              <Route path="appointments" element={<AppointmentTrackingPage />} />
+              <Route path="cycle-details" element={<CycleDetailsPage />} />
+              <Route path="health-report" element={<HealthReportPage />} />
+              <Route path="settings/:slug" element={<ProfileSettingsSubPage />} />
+            </Route>
           </Route>
         </Routes>
       </NavbarVisibilityProvider>

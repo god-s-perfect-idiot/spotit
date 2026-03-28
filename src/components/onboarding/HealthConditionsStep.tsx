@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import { updateUser } from "../../store/authSlice";
 import { Plus, XCircle } from "lucide-react";
+import { Loader } from "../ui-kit/Loader";
 
 interface HealthConditionsStepProps {
   onComplete: () => void;
@@ -114,10 +115,10 @@ export default function HealthConditionsStep({
             <button
               key={condition.value}
               onClick={() => handleConditionToggle(condition.value)}
-              className={`w-full bg-white rounded-full border-[2px] border-[#ff6961] px-4 py-3 text-black font-medium transition-colors text-center ${
+              className={`w-full rounded-full border-[2px] border-[#ff6961] px-4 py-3 text-center font-medium transition-colors ${
                 selectedConditions.has(condition.value)
                   ? "!bg-[#ff6961] text-white"
-                  : ""
+                  : "bg-white text-black"
               }`}
             >
               {condition.label}
@@ -131,7 +132,7 @@ export default function HealthConditionsStep({
             {customConditions.map((condition, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between w-full bg-white rounded-full border-[2px] border-[#ff6961] px-4 py-3"
+                className="flex w-full items-center justify-between rounded-full border-[2px] border-[#ff6961] bg-white px-4 py-3"
               >
                 <span className="text-black font-medium">{condition}</span>
                 <button
@@ -163,13 +164,13 @@ export default function HealthConditionsStep({
                   }
                 }}
                 placeholder="Enter condition"
-                className="flex-1 px-4 py-3 rounded-full font-medium border-[2px] border-gray-300 bg-white text-black focus:outline-none focus:border-[#ff6961]"
+                className="flex-1 rounded-full border-[2px] border-[#ff6961] bg-white px-4 py-3 font-medium text-black focus:outline-none"
                 autoFocus
               />
               <button
                 onClick={handleAddCustom}
                 disabled={!customInputValue.trim()}
-                className="px-4 py-2 h-fit bg-[#ff6961] text-white rounded-full font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="h-fit rounded-full bg-[#ff6961] px-4 py-2 font-medium text-white shadow-md disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Add
               </button>
@@ -178,7 +179,7 @@ export default function HealthConditionsStep({
         ) : (
           <button
             onClick={() => setShowCustomInput(true)}
-            className="w-full bg-white rounded-full border-[2px] border-gray-300 px-4 py-3 text-gray-500 font-medium mb-4 flex items-center justify-center gap-2"
+            className="mb-4 flex w-full items-center justify-center gap-2 rounded-full border-[2px] border-dashed border-[#ff6961] bg-white px-4 py-3 font-medium text-[#ff6961]"
           >
             <Plus size={20} />
             Add other conditions
@@ -191,9 +192,13 @@ export default function HealthConditionsStep({
         <button
           onClick={handleComplete}
           disabled={isSaving}
-          className="w-full bg-[#ff6961] text-white font-bold text-lg py-2 px-12 max-w-[22rem] rounded-full shadow-md mt-2 mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="mt-2 mb-4 flex w-full max-w-[22rem] items-center justify-center rounded-full bg-[#ff6961] px-12 py-2 text-lg font-bold text-white shadow-md disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isSaving ? "Saving..." : "Complete"}
+          {isSaving ? (
+            <Loader withCard={false} size="compact" label="Saving" labelClassName="text-white" />
+          ) : (
+            "Complete"
+          )}
         </button>
       </div>
     </div>

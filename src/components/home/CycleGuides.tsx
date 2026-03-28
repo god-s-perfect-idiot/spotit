@@ -31,7 +31,7 @@ export default function CycleGuides() {
       <div className="flex flex-row gap-4 overflow-x-auto pr-2 pb-2 scrollbar-hide">
         {guides.map((guide) => (
             <div key={guide.title} className="flex flex-col gap-2 justify-center items-center">
-                <div className="w-[6rem] h-[6rem] bg-white rounded-2xl"/>
+                <div className="h-[6rem] w-[6rem] rounded-2xl bg-white" />
                 <span className="text-sm text-center">{guide.title}</span>
             </div>
         ))}

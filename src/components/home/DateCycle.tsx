@@ -65,10 +65,10 @@ export default function DateCycle() {
   const monthYear = getMonthYear();
 
   // Navigation button base classes
-  const navButtonClasses = `py-1 px-4 rounded-full transition-all duration-200 bg-white border border-2 font-semibold border-[#FF8D7B] ${
+  const navButtonClasses = `rounded-full border border-2 border-[#FF8D7B] bg-white px-4 py-1 font-semibold text-[#FF8D7B] transition-all duration-200 ${
     isTransitioning 
-      ? 'opacity-50 cursor-not-allowed' 
-      : 'hover:bg-gray-100 text-[#FF8D7B] hover:scale-105'
+      ? 'cursor-not-allowed opacity-50' 
+      : 'hover:scale-105 hover:bg-gray-100'
   }`;
 
   // Navigation handlers
@@ -201,15 +201,15 @@ export default function DateCycle() {
 
                 {/* Date row */}
                 <div
-                  className={`relative flex items-center justify-center w-11 h-11 rounded-2xl border-3 transition-all duration-300 ease-in-out ${
+                  className={`relative flex h-11 w-11 items-center justify-center rounded-2xl border-3 transition-all duration-300 ease-in-out ${
                     isSelected
-                      ? "border-[#FF8D7B] scale-105 shadow-lg"
+                      ? "scale-105 border-[#FF8D7B] shadow-lg"
                       : predictionType === "ovulation"
-                      ? "border-dotted border-[#ffd700] hover:scale-102"
-                      : predictionType === "period"
-                      ? "border-dotted border-[#FF6961] hover:scale-102"
-                      : "border-transparent hover:scale-102 hover:border-gray-300"
-                  } ${isLogged ? "bg-[#FF6961] !border-[#FF6961]" : "bg-white"}`}
+                        ? "border-dotted border-[#ffd700] hover:scale-102"
+                        : predictionType === "period"
+                          ? "border-dotted border-[#FF6961] hover:scale-102"
+                          : "border-transparent hover:scale-102 hover:border-gray-300"
+                  } ${isLogged ? "border-[#FF6961] !border-[#FF6961] bg-[#FF6961]" : "bg-white"}`}
                 >
                   <span
                     className={`text-lg font-medium flex justify-center items-center transition-all duration-300 ease-in-out ${

@@ -2,7 +2,7 @@ export default function LoggedInsights() {
     return (
         <div className="flex flex-col gap-4">
             <span className="font-bold">Other Logged Insights</span>
-            <div className="flex flex-col gap-4 bg-[#F9D1CD] rounded-2xl p-4 w-full h-full">
+            <div className="flex h-full w-full flex-col gap-4 rounded-2xl bg-[#F9D1CD] p-4">
                 <div className="flex flex-col gap-2">
                     <span>Sleep Patterns</span>
                     <span className="font-semibold">Avg 7.2 hours per night</span>

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import RateFeeling from '../components/home/RateFeeling';
 import DateCycle from '../components/home/DateCycle';
 import DayBrief from '../components/home/DayBrief';
@@ -6,33 +5,11 @@ import CycleGuides from '../components/home/CycleGuides';
 import Blogs from '../components/Blogs';
 import Notifications from '../components/Notifications';
 import { useNavigate } from 'react-router-dom';
-import { getLatestPeriodLogForLocalDay } from '../utils/periodLogs';
-import { onAuthStateChange } from '../utils/firebaseAuth';
+import { useAppSelector } from '../store/hooks';
 
 export default function Home() {
   const navigate = useNavigate();
-  const [hasLoggedToday, setHasLoggedToday] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const refresh = async () => {
-      const log = await getLatestPeriodLogForLocalDay();
-      if (!cancelled) {
-        setHasLoggedToday(log != null);
-      }
-    };
-
-    refresh();
-    const unsub = onAuthStateChange(() => {
-      void refresh();
-    });
-
-    return () => {
-      cancelled = true;
-      unsub();
-    };
-  }, []);
+  const hasLoggedToday = useAppSelector((s) => s.appData.todayPeriodLog != null);
 
   return (
     <div className="flex-1 p-6 flex flex-col gap-4">
@@ -46,7 +23,8 @@ export default function Home() {
       <div className="flex flex-row gap-4 justify-between">
         <button
           // onClick={() => navigate('/log')}
-          className="flex justify-center items-center border border-2 border-[#FF6961] text-[#FF6961] bg-white rounded-full w-1/2 text-base  py-2 px-1 font-bold"
+          type="button"
+          className="flex w-1/2 items-center justify-center rounded-full border border-2 border-[#FF6961] bg-white px-1 py-2 text-base font-bold text-[#FF6961]"
         >
           Log Period
         </button>
@@ -54,8 +32,8 @@ export default function Home() {
           onClick={() => navigate('/log')}
           className={
             hasLoggedToday
-              ? 'flex justify-center items-center border-2 border-[#33B1FF] bg-[#33B1FF] text-white rounded-full w-1/2 text-base py-2 px-1 font-bold'
-              : 'flex justify-center items-center border border-2 border-[#33B1FF] text-[#33B1FF] bg-white rounded-full w-1/2 text-base py-2 px-1 font-bold'
+              ? 'flex w-1/2 items-center justify-center rounded-full border-2 border-[#33B1FF] bg-[#33B1FF] px-1 py-2 text-base font-bold text-white'
+              : 'flex w-1/2 items-center justify-center rounded-full border border-2 border-[#33B1FF] bg-white px-1 py-2 text-base font-bold text-[#33B1FF]'
           }
           type="button"
         >

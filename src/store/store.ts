@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import authReducer from './authSlice';
+import appDataReducer from './appDataSlice';
 
 // Create persisted reducer
 const persistedAuthReducer = persistReducer(
@@ -16,6 +17,7 @@ const persistedAuthReducer = persistReducer(
 export const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
+    appData: appDataReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

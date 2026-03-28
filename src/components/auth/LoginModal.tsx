@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Loader } from "../ui-kit/Loader";
 import { Eye, EyeOff } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { loginWithEmail, loginWithGoogle, loginWithApple, clearError } from "../../store/authSlice";
@@ -98,7 +99,7 @@ export default function LoginModal({ onSignup, onSuccess }: LoginModalProps) {
             name="email"
             placeholder="Email Id"
             required
-            className="w-full px-4 py-3 rounded-full border border-[#FF8D7B] bg-white focus:outline-none focus:ring-2 focus:ring-coral-500 focus:border-transparent"
+            className="w-full rounded-full border border-[#FF8D7B] bg-white px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-coral-500"
             value={credentials.email}
             onChange={handleInputChange}
           />
@@ -110,7 +111,7 @@ export default function LoginModal({ onSignup, onSuccess }: LoginModalProps) {
             name="password"
             placeholder="Password"
             required
-            className="w-full px-4 py-3 rounded-full border border-[#FF8D7B] bg-white focus:outline-none focus:ring-2 focus:ring-coral-500 focus:border-transparent pr-12"
+            className="w-full rounded-full border border-[#FF8D7B] bg-white px-4 py-3 pr-12 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-coral-500"
             value={credentials.password}
             onChange={handleInputChange}
           />
@@ -129,7 +130,7 @@ export default function LoginModal({ onSignup, onSuccess }: LoginModalProps) {
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="custom-checkbox w-4 h-4 appearance-none rounded border-2 border-[#FF8D7B] bg-[#FFE9E5] checked:bg-[#FF8D7B] checked:border-[#FF8D7B] outline-none cursor-pointer relative"
+              className="custom-checkbox relative h-4 w-4 cursor-pointer appearance-none rounded border-2 border-[#FF8D7B] bg-[#FFE9E5] outline-none checked:border-[#FF8D7B] checked:bg-[#FF8D7B]"
             />
             <span className="ml-2 text-sm text-gray-600">Remember me</span>
           </label>
@@ -148,9 +149,13 @@ export default function LoginModal({ onSignup, onSuccess }: LoginModalProps) {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-[#FF6961] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-4 px-6 rounded-full transition-colors duration-200 shadow-md"
+          className="flex w-full items-center justify-center rounded-full bg-[#FF6961] px-6 py-4 font-semibold text-white shadow-md transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isLoading ? "Signing In..." : "Log In"}
+          {isLoading ? (
+            <Loader withCard={false} size="compact" label="Signing in" labelClassName="text-white" />
+          ) : (
+            "Log In"
+          )}
         </button>
       </form>
 
@@ -161,7 +166,7 @@ export default function LoginModal({ onSignup, onSuccess }: LoginModalProps) {
             type="button"
             onClick={handleGoogleSignIn}
             disabled={isLoading}
-            className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition-shadow hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
           >
             <span className="text-blue-600 font-bold">G</span>
           </button>
@@ -169,7 +174,7 @@ export default function LoginModal({ onSignup, onSuccess }: LoginModalProps) {
             type="button"
             onClick={handleAppleSignIn}
             disabled={isLoading}
-            className="w-10 h-10 bg-black rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-black shadow-md transition-shadow hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
           >
             <span className="text-white text-sm">🍎</span>
           </button>

@@ -24,6 +24,10 @@ export interface UserData {
     | "get-pregnant"
     | "track-pregnancy"
     | "track-perimenopause";
+  /** E.164-style or display string, optional profile field */
+  phone?: string;
+  /** Personal details — content interests */
+  topicsOfInterest?: string[];
   healthConditions?: {
     predefined: string[];
     custom: string[];
@@ -271,6 +275,19 @@ export const logout = async (): Promise<void> => {
 export const getCurrentFirebaseUser = (): User | null => {
   return auth.currentUser;
 };
+
+/**
+ * Resolves on the first Firebase Auth state emission (after session restore).
+ * Use before reads that depend on `auth.currentUser` so you do not run with a stale null.
+ */
+export function whenAuthReady(): Promise<User | null> {
+  return new Promise((resolve) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe();
+      resolve(user);
+    });
+  });
+}
 
 // Auth state observer
 export const onAuthStateChange = (callback: (user: User | null) => void) => {

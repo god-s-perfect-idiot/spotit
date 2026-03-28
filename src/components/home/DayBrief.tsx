@@ -27,7 +27,7 @@ export default function DayBrief() {
   return (
     // linear gradient from fff to ff8a65
     <div
-      className={`relative flex cursor-pointer flex-col gap-2 text-center p-6 border-2 rounded-[3rem]`}
+      className={`relative flex cursor-pointer flex-col gap-2 rounded-[3rem] border-2 p-6 text-center`}
       style={{
         background: `linear-gradient(to bottom, #ffffff, ${phaseColor})`,
         borderColor: phaseColor,

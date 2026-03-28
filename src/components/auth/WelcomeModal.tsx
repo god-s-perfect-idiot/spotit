@@ -18,7 +18,7 @@ export default function WelcomeModal({ onGetStarted }: WelcomeModalProps) {
       <div className="w-full flex justify-center">
         <button
           onClick={onGetStarted}
-          className="w-full bg-[#ff6961] text-white font-bold text-lg py-2 px-12 max-w-[26rem] rounded-full shadow-md mt-2 mb-4 self-center"
+          className="mt-2 mb-4 w-full max-w-[26rem] self-center rounded-full bg-[#ff6961] px-12 py-2 text-lg font-bold text-white shadow-md"
         >
           Get Started
         </button>

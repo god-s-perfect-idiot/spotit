@@ -23,7 +23,7 @@ export default function LoginSignupChoiceModal({
       <div className="space-y-4 w-full flex flex-col items-center">
         <button
           onClick={onLogin}
-          className="w-full max-w-[26rem] bg-[#ff6961] text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-md"
+          className="w-full max-w-[26rem] rounded-full bg-[#ff6961] px-6 py-2 font-bold text-white shadow-md transition-colors duration-200"
         >
           Log In
         </button>
@@ -32,7 +32,7 @@ export default function LoginSignupChoiceModal({
 
         <button
           onClick={onSignup}
-          className="w-full max-w-[26rem] bg-[#ff6961] text-white font-bold py-2 px-6 rounded-full transition-colors duration-200 shadow-md"
+          className="w-full max-w-[26rem] rounded-full bg-[#ff6961] px-6 py-2 font-bold text-white shadow-md transition-colors duration-200"
         >
           Sign Up
         </button>
